@@ -1,0 +1,1 @@
+Returns the cube of numeric input n via two chained multiplications, n * n * n, avoiding the overhead of pow or the ** operator. Runs in O(1) for floats and preserves the sign of n since cubing an odd power of a negative number yields a negative result. Passing a non-numeric value raises TypeError when Python attempts the multiplication.

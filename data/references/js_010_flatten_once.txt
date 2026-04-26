@@ -1,0 +1,1 @@
+Flattens the input array arr by exactly one level by spreading its elements as arguments to Array.prototype.concat called on an empty array. Returns a new array in O(n) time without mutating the input. Only unwraps the first nesting level, so deeply nested subarrays remain nested, and non-array elements at the top level are preserved as-is.

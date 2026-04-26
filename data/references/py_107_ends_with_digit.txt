@@ -1,0 +1,1 @@
+Returns True when string s is non-empty and its last character satisfies str.isdigit, otherwise False. The empty-string guard avoids an IndexError when accessing s[-1], and the function runs in O(1) time. Note that str.isdigit recognizes Unicode digit characters beyond ASCII 0-9, so superscript or other digit categories also return True.

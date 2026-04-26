@@ -1,0 +1,1 @@
+Returns a new string consisting of the input str concatenated with itself times times by delegating to the built-in String.prototype.repeat. Runs in O(n times) time and space and does not mutate the input. Throws a RangeError when times is negative or non-finite, returns an empty string when times is 0, and coerces fractional counts down to integers per the spec.

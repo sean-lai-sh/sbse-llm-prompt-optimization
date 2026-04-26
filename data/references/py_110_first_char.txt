@@ -1,0 +1,1 @@
+Returns the first character of string s, or the empty string "" when s is empty or otherwise falsy. The truthiness guard prevents the IndexError that s[0] would otherwise raise on an empty input. Runs in O(1) time and returns a single-character string rather than raising on missing input.

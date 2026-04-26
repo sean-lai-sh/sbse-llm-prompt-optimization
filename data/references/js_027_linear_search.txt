@@ -1,0 +1,1 @@
+Scans the input array arr from index 0 onward and returns the index of the first element strictly equal to target, or -1 if no match is found. Runs in O(n) time and O(1) space and does not mutate the input. Uses === comparison, so NaN is never matched and object equality is by reference rather than by value.

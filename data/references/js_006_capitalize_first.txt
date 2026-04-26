@@ -1,0 +1,1 @@
+Returns a new string with the first character of the input str converted to uppercase and the remainder left unchanged. Short-circuits and returns the input as-is when str is falsy, including empty string, null, or undefined, so no error is thrown. Operates on UTF-16 code units, so non-BMP characters represented by surrogate pairs at the start are not handled correctly.

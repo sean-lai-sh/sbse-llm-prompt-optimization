@@ -1,0 +1,1 @@
+Returns the nth Fibonacci number using an iterative bottom-up approach with two rolling variables a and b updated via destructuring assignment. Handles base cases by returning 0 for n less than or equal to 0 and 1 for n equal to 1, otherwise loops from 2 to n. Runs in O(n) time and O(1) extra space, but loses precision for large n because results exceed Number.MAX_SAFE_INTEGER.

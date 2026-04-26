@@ -1,0 +1,1 @@
+Counts how many elements of the input array arr are strictly equal to value by filtering the array and returning the length of the resulting array. Runs in O(n) time and O(k) extra space where k is the number of matches, since filter allocates a new array. Uses === comparison, so NaN never matches itself and object equality is by reference.
