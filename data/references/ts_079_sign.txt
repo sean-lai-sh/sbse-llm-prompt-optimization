@@ -1,0 +1,1 @@
+Returns the sign of the input n as the literal type -1 | 0 | 1, mapping positives to 1, negatives to -1, and the zero/fallback case to 0. The implementation is two constant-time comparisons; because NaN is neither greater than nor less than 0, the function returns 0 for NaN, which differs from Math.sign's behavior of returning NaN. Both +0 and -0 also map to 0.

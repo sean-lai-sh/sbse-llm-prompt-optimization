@@ -1,0 +1,1 @@
+Flattens an array of arrays by exactly one level using Array.prototype.concat with the spread operator on an empty seed array. It is generic over T and converts T[][] into T[] in O(n) time and O(n) space relative to the total element count. Only the outer level is unwrapped, so nested arrays deeper than one level remain as arrays in the result, and the input is not mutated.

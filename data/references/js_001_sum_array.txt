@@ -1,0 +1,1 @@
+Computes the arithmetic sum of all elements in the input array arr by invoking Array.prototype.reduce with an initial accumulator of 0. Runs in O(n) time and O(1) extra space, returning 0 for an empty array. Returns NaN if the array contains non-numeric values that cannot be coerced via the + operator, and does not validate or coerce input types.

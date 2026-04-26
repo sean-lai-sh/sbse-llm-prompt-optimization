@@ -1,0 +1,1 @@
+Returns the total of the numeric elements in list lst by delegating to the built-in sum, which iterates the list with an implicit start value of 0. The operation is O(n) in the list length and yields 0 for an empty list rather than raising. Mixing ints and floats produces a float, but non-numeric items raise TypeError when sum tries to add them to the integer accumulator.

@@ -1,0 +1,1 @@
+Computes the arithmetic sum of a numeric array by folding it with Array.prototype.reduce starting from an initial accumulator of zero. It accepts a number[] and returns a number, running in O(n) time and O(1) extra space. Passing an empty array correctly returns 0 because of the explicit seed value, and the input array is not mutated.

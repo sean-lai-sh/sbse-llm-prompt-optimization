@@ -1,0 +1,1 @@
+Computes the number of r-permutations of n items, P(n, r) = n!/(n-r)!, by iteratively multiplying the descending sequence n, n-1, ..., n-r+1. It accepts integers n and r and returns the integer count, returning 0 when r is negative or greater than n. The loop runs in O(r) time and O(1) space; it does not validate that inputs are non-negative beyond the r > n bound.

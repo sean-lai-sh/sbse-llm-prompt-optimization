@@ -1,0 +1,1 @@
+Returns the maximum numeric value contained in the input array arr by reducing across the elements while seeding the accumulator with arr[0]. Runs in O(n) time and O(1) extra space without mutating the input. Returns undefined for an empty array because the seed becomes undefined, and yields NaN if any element is NaN since comparisons with NaN are always false.

@@ -1,0 +1,1 @@
+Counts the number of non-overlapping occurrences of substring ch within string s using the built-in str.count method, returning an integer. The implementation is O(len(s) * len(ch)) in the worst case and accepts ch of any length, not just single characters despite the name. If ch is the empty string, str.count returns len(s) + 1, and the search is case-sensitive.

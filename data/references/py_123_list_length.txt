@@ -1,0 +1,1 @@
+Returns the number of elements in list lst by delegating to the built-in len function. Runs in O(1) time because Python lists store their length as part of the object header rather than counting items. The function works on any object implementing __len__ and raises TypeError for objects that do not.

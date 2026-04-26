@@ -1,0 +1,1 @@
+Returns the smallest value in a numeric array by reducing it with a binary min comparison seeded with the first element. It accepts a number[] and yields a number in O(n) time and O(1) extra space, explicitly throwing a RangeError on an empty input instead of yielding Infinity. The function is non-mutating and does not perform any special handling for NaN entries.

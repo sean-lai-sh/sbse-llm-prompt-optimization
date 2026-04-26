@@ -1,0 +1,1 @@
+Constrains a numeric value to lie within the inclusive range [min_val, max_val] by returning max(min_val, min(max_val, value)). The function takes three numeric arguments and returns the clamped float in O(1) time without mutation. It does not validate that min_val <= max_val, so passing an inverted range will always return min_val regardless of the input value.

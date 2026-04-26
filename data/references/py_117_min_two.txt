@@ -1,0 +1,1 @@
+Returns the smaller of two numeric arguments a and b using a conditional expression that returns a when a <= b and b otherwise. Runs in O(1) time and breaks ties by returning the first argument a when the values are equal. Comparison semantics rely on the < operator, so passing NaN can produce surprising results because NaN comparisons always evaluate to False.

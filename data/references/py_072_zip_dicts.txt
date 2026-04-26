@@ -1,0 +1,1 @@
+Builds a dict by pairing each element of keys with the same-index element of values via dict(zip(...)). Raises ValueError if the two input lists have different lengths, so it does not silently truncate like raw zip would. Runs in O(n) time and space; later duplicate keys in the keys list overwrite earlier entries due to standard dict semantics.

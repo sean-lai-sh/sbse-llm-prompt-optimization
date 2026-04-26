@@ -1,0 +1,1 @@
+Converts a temperature c in degrees Celsius to degrees Fahrenheit using the standard formula (c * 9) / 5 + 32, returning the result as a number. The computation is O(1) with no input validation; NaN propagates and +/-Infinity map to +/-Infinity. Floating-point rounding may introduce small inaccuracies for values that are not exactly representable in binary.

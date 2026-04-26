@@ -1,0 +1,1 @@
+Recursively computes the greatest common divisor of two integers using the Euclidean algorithm, returning abs(a) once b reaches 0 to ensure a non-negative result. Each recursive call replaces (a, b) with (b, a % b), giving O(log min(a, b)) time and recursion depth. The function correctly handles negative inputs through the final abs and treats gcd(0, 0) as 0.

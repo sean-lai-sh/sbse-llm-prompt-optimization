@@ -1,0 +1,1 @@
+Counts the number of distinct ways to climb a staircase of n steps when each move covers 1 or 2 steps, which is the (n+1)-th Fibonacci number. It iterates from 2 to n updating two rolling values a and b via a, b = b, a + b, achieving O(n) time and O(1) space. The function short-circuits to 1 for n <= 1, covering the base cases for 0 and 1 step.

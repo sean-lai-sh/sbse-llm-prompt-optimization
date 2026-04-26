@@ -1,0 +1,1 @@
+Returns the larger of two numeric inputs a and b via the conditional expression a if a >= b else b. Runs in O(1) time and breaks ties by returning a when both values are equal. Because the >= comparison returns False for any NaN operand, a NaN argument may cause the function to return b unexpectedly.

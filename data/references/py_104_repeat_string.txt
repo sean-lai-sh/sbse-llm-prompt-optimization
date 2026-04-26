@@ -1,0 +1,1 @@
+Returns the string s concatenated with itself n times by leveraging Python's built-in string multiplication operator. Time and space complexity are both O(n * len(s)) for the newly allocated result string. When n is zero or negative the operator returns an empty string, and passing a non-integer n will raise TypeError.

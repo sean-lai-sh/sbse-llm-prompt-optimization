@@ -1,0 +1,1 @@
+Returns the smallest numeric element in list lst by delegating to the built-in min, which performs an O(n) single-pass linear scan. Without a default argument, calling it on an empty list raises ValueError, so the function does not handle that edge case. All elements must be mutually comparable, and ties are broken by returning the first occurrence of the minimum value.

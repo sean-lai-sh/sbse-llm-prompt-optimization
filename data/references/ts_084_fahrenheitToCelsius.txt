@@ -1,0 +1,1 @@
+Converts a temperature f in degrees Fahrenheit to degrees Celsius using ((f - 32) * 5) / 9, returning a number. Operations are constant time, no input validation is performed, and NaN or Infinity inputs propagate as expected. Standard IEEE-754 double precision applies, so results may exhibit minor floating-point representation error.

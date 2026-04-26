@@ -1,0 +1,1 @@
+Returns the cube of the input number n via two multiplications, n * n * n, in O(1) time and space. The result preserves the sign of n, and like all JavaScript number arithmetic it can overflow to Infinity for very large magnitudes and propagates NaN when n is NaN. No input validation is performed.

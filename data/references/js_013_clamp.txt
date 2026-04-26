@@ -1,0 +1,1 @@
+Constrains the numeric value into the inclusive interval [min, max] by composing Math.max(value, min) inside Math.min with max. Returns value when it lies within the range, otherwise returns the nearer bound, in O(1) time and space. Produces NaN if any argument is NaN, and yields counterintuitive results when min is greater than max because the outer Math.min then dominates.

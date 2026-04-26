@@ -1,0 +1,1 @@
+Returns the sum of the decimal digits of an integer n, treating negative inputs by taking the absolute value first. It converts the absolute value to its string form and sums the integer value of each character, running in O(d) time where d is the number of digits. The function returns 0 for n == 0 and does not handle non-integer numeric types or floats.

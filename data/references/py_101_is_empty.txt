@@ -1,0 +1,1 @@
+Returns True if the input string s has zero length, otherwise False, by comparing len(s) to 0. It runs in O(1) time since Python strings store their length, and treats only the empty string "" as empty without considering whitespace-only strings. The function does not handle non-string inputs and will raise TypeError if passed an object lacking a defined len.

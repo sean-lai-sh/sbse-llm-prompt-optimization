@@ -1,0 +1,1 @@
+Counts the number of vowels in a string and returns the count as an int. It lowercases the input and sums 1 for each character that belongs to the set 'aeiou' using a generator expression. Time and space complexity are O(n) and O(1) respectively, the count is case-insensitive but treats only the five English vowels (so 'y' and accented letters like 'á' are not counted).
