@@ -1,0 +1,1 @@
+Tests whether a number is even by checking that n modulo 2 equals zero. It takes a number and returns a boolean in constant time and space. Because JavaScript's % operator preserves sign and works on floats, negative even integers correctly return true while non-integer values like 2.5 return false and NaN propagates to false through the strict comparison.

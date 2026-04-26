@@ -1,0 +1,1 @@
+Returns the first element at index 0 of list lst, or None when the list is empty or otherwise falsy, using a short-circuit conditional expression. The check avoids an IndexError that direct indexing would raise on an empty list, and runs in O(1) time. Note that the function cannot distinguish "empty list" from "first element is None" since both produce a None return.

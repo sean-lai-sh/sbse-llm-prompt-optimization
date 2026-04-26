@@ -1,0 +1,1 @@
+Returns True if integer n is divisible by 2, otherwise False, by checking whether n % 2 equals 0. Runs in O(1) time and works correctly for negative integers and zero, since Python's modulo always returns a non-negative remainder when the divisor is positive. Passing a float will still evaluate but follows float modulo semantics, which can be unintuitive for non-integral values.

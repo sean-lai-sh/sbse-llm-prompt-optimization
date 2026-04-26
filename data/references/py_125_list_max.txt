@@ -1,0 +1,1 @@
+Returns the largest numeric element in list lst by delegating to the built-in max, which performs an O(n) linear scan using pairwise comparisons. The function does not provide a default, so calling it with an empty list raises ValueError. All elements must be mutually comparable with <, otherwise a TypeError is raised on the first incompatible pair.

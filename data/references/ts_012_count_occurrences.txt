@@ -1,0 +1,1 @@
+Counts how many elements of an array are strictly equal to a given target by reducing the array with a running counter. It is generic over T, taking a T[] and a T value and returning a number in O(n) time and O(1) extra space. Equality uses === so NaN never matches itself and distinct object references are considered different, even when they have identical contents.

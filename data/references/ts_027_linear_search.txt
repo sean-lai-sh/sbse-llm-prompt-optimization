@@ -1,0 +1,1 @@
+Scans an array from left to right and returns the index of the first element strictly equal to the target. It is generic over T, taking a T[] and a T value and returning a number, running in O(n) time and O(1) space. It returns -1 when no match is found, and equality is performed with === so NaN never matches itself and object references are compared by identity.

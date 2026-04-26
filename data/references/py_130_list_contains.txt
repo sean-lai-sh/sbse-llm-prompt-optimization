@@ -1,0 +1,1 @@
+Returns True if item is present in list lst, otherwise False, by using Python's in operator which performs equality comparison. The membership test is O(n) in the list length because it scans linearly, and short-circuits as soon as a match is found. Equality semantics depend on each element's __eq__, so NaN will not be found because float NaN is not equal to itself.

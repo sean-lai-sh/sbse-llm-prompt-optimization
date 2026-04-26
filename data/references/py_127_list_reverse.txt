@@ -1,0 +1,1 @@
+Returns a new list containing the elements of lst in reverse order by using the slice expression lst[::-1] with a step of -1. The operation is O(n) in time and space because slicing allocates a fresh list rather than reversing in place, leaving the original list unmodified. An empty input list yields a new empty list without error.

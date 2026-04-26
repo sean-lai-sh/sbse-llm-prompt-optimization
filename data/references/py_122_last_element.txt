@@ -1,0 +1,1 @@
+Returns the last element of list lst via negative indexing lst[-1], or None when lst is empty, using a truthiness guard to prevent IndexError. The operation is O(1) because Python lists support constant-time random access from either end. The function cannot distinguish an empty list from a list whose final element is itself None.

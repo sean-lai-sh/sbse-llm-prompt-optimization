@@ -1,0 +1,1 @@
+Computes the greatest common divisor of two integers using the iterative Euclidean algorithm on their absolute values. It takes two numbers and returns a number in O(log(min(a, b))) time and O(1) space. By taking absolute values first it handles negative inputs correctly, and gcd(0, 0) returns 0 while gcd(x, 0) returns the absolute value of x.

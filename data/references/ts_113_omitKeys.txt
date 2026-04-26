@@ -1,0 +1,1 @@
+Returns a shallow copy of obj with the specified keys removed, typed as Omit<T, K>. It uses object spread to clone, then iterates the keys array calling delete on each, mutating only the copy and leaving the original untouched. The clone is shallow (nested objects are shared by reference), and properties on the prototype chain are not considered.
