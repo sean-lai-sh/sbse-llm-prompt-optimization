@@ -1,0 +1,30 @@
+from typing import Dict
+
+
+def decode_ways(s: str, memo: Dict[int, int] = None) -> int:
+    if not s:
+        return 0
+
+    for ch in s:
+        if not ch.isdigit():
+            raise ValueError(f"Input must contain only digits, got '{ch}'")
+
+    if memo is None:
+        memo = {}
+
+    n = len(s)
+    dp = [0] * (n + 1)
+    dp[0] = 1
+    dp[1] = 0 if s[0] == '0' else 1
+
+    for i in range(2, n + 1):
+        one_digit = int(s[i - 1])
+        two_digit = int(s[i - 2:i])
+
+        if one_digit != 0:
+            dp[i] += dp[i - 1]
+
+        if 10 <= two_digit <= 26:
+            dp[i] += dp[i - 2]
+
+    return dp[n]
