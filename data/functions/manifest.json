@@ -1,0 +1,2502 @@
+[
+  {
+    "filename": "js_001_sum_array.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_002_max_array.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_003_min_array.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_004_reverse_string.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_005_is_palindrome.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_006_capitalize_first.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_007_is_even.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_008_factorial.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_009_fibonacci.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_010_flatten_once.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_011_unique_array.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_012_count_occurrences.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_013_clamp.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_014_to_title_case.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_015_truncate_string.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_016_repeat_string.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_017_is_prime.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_018_gcd.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_019_lcm.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_020_range_array.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_021_bubble_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_022_insertion_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_023_selection_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_024_merge_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_025_quick_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_026_binary_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_027_linear_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_028_jump_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_029_interpolation_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_030_shell_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_031_counting_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_032_radix_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_033_heap_sort.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_034_ternary_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_035_exponential_search.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_036_longest_common_prefix.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_037_anagram_check.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_038_caesar_cipher.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_039_run_length_encode.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_040_reverse_words.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_041_camel_to_snake.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_042_snake_to_camel.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_043_word_frequency.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_044_most_frequent_char.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_045_balanced_brackets.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_046_chunk_array.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_047_zip_arrays.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_048_group_by.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_049_flatten_deep.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_050_deep_clone.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_051_debounce.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_052_throttle.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_053_memoize.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_054_pipe.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_055_curry.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_056_two_sum.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_057_max_subarray_kadane.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_058_longest_increasing_subsequence.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_059_edit_distance.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_060_knapsack_01.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_061_coin_change.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_062_longest_common_subsequence.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_063_matrix_chain_mult.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_064_dijkstra.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_065_topological_sort.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_066_trapping_rain_water.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_067_merge_intervals.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_068_word_break.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_069_regular_expression_match.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_070_wildcard_match.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_071_binary_tree_level_order.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_072_valid_parenthesis_length.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_073_largest_rectangle_histogram.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_074_median_of_two_sorted_arrays.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_075_skyline_problem.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_076_square.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_077_cube.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_078_absoluteValue.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_079_sign.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_080_powerOfTwo.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_081_isInteger.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_082_roundTo.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_083_celsiusToFahrenheit.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_084_fahrenheitToCelsius.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_085_degreesToRadians.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_086_radiansToDegrees.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_087_percentOf.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_088_average.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_089_median.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_090_mode.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_091_isAnagram.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_092_countVowels.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_093_removeSpaces.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_094_reverseArray.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_095_arraySum.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_096_arrayProduct.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_097_arrayAverage.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_098_firstNFibonacci.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_099_sumOfDigits.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_100_digitCount.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_101_safeJsonParse.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_102_safeGet.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_103_retryAsync.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_104_withTimeout.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_105_validateEmail.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_106_validateUrl.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_107_validateCreditCard.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_108_parseQueryString.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_109_buildQueryString.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_110_sanitizeHtml.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_111_deepEqual.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_112_shallowEqual.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_113_omitKeys.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_114_pickKeys.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_115_mergeDeep.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_116_pivotTable.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_117_invertObject.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_118_flattenObject.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_119_unflattenObject.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_120_csvToJson.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_121_jsonToCsv.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_122_sortByKey.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_123_sortByMultipleKeys.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_124_groupAndCount.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_125_normalizeArray.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_126_slidingWindowMax.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_127_rotateMatrix.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_128_transposeMatrix.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_129_spiralOrder.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_130_matrixMultiply.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_131_productExceptSelf.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_132_nextPermutation.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_133_threeSum.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_134_containerWithMostWater.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_135_minimumWindowSubstring.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_136_trieInsertSearch.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_137_unionFind.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_138_segmentTree.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_139_fenwickTree.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_140_lruCache.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_141_priorityQueue.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_142_graphBFS.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_143_graphDFS.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_144_kmpSearch.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_145_zAlgorithm.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_146_huffmanCoding.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_147_aStarSearch.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_148_floydWarshall.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_149_bellmanFord.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_150_consistentHashing.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_001_bubble_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_002_insertion_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_003_selection_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_004_merge_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_005_quick_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_006_heap_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_007_counting_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_008_radix_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_009_shell_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_010_cocktail_sort.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_011_linear_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_012_binary_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_013_jump_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_014_interpolation_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_015_exponential_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_016_fibonacci_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_017_ternary_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_018_sentinel_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_019_meta_binary_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_020_depth_first_search.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_021_reverse_string.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_022_is_palindrome.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_023_is_anagram.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_024_caesar_cipher.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_025_count_vowels.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_026_title_case.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_027_compress_string.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_028_word_count.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_029_longest_common_prefix.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_030_pig_latin.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_031_rot13.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_032_slugify.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_033_camel_to_snake.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_034_truncate.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_035_wrap_text.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_036_strip_html_tags.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_037_is_pangram.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_038_abbreviate.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_039_capitalize_words.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_040_normalize_whitespace.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_041_factorial.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_042_fibonacci.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_043_gcd.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_044_lcm.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_045_is_prime.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_046_sieve_of_eratosthenes.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_047_power.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_048_sqrt_newton.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_049_is_perfect.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_050_digital_root.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_051_collatz.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_052_combinations.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_053_permutations.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_054_hamming_distance.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_055_luhn_check.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_056_sum_digits.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_057_is_armstrong.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_058_roman_to_int.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_059_int_to_roman.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_060_clamp.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_061_tower_of_hanoi.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_062_flatten_nested.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_063_tree_height.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_064_sum_nested.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_065_count_occurrences.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_066_power_recursive.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_067_sum_digits_recursive.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_068_palindrome_recursive.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_069_fib_recursive.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_070_gcd_recursive.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_071_chunk_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_072_zip_dicts.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_073_invert_dict.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_074_flatten_dict.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_075_group_by.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_076_deep_merge.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_077_pivot_table.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_078_transpose_matrix.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_079_normalize_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_080_deduplicate.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_081_json_safe_parse.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_082_safe_divide.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_083_retry_decorator.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_084_memoize_decorator.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_085_rate_limiter.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_086_lru_cache_impl.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_087_binary_tree_ops.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_088_matrix_multiply.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_089_longest_common_subsequence.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_090_edit_distance.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_091_knapsack.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_092_topological_sort.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_093_dijkstra_shortest.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_094_merge_intervals.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_095_decode_ways.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_096_word_break.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_097_coin_change.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_098_trapping_rain.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_099_maximal_square.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_100_regex_tokenizer.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_101_is_empty.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_102_to_uppercase.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_103_to_lowercase.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_104_repeat_string.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_105_char_count.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_106_starts_with_vowel.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_107_ends_with_digit.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_108_strip_punctuation.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_109_count_words.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_110_first_char.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_111_square.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_112_cube.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_113_is_even.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_114_is_odd.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_115_abs_val.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_116_sign.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_117_min_two.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_118_max_two.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_119_sum_pair.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_120_average_two.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_121_first_element.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_122_last_element.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_123_list_length.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_124_list_sum.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_125_list_max.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_126_list_min.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_127_list_reverse.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_128_list_unique.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_129_list_flatten_one.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_130_list_contains.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_131_balanced_brackets.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_132_longest_palindrome_substr.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_133_count_substrings.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_134_run_length_encode.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_135_decode_run_length.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_136_find_all_permutations.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_137_is_rotation.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_138_string_to_int_manual.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_139_int_to_string_manual.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_140_most_frequent_char.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_141_word_frequency.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_142_remove_duplicates_str.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_143_interleave_strings.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_144_is_valid_email_simple.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_145_extract_numbers_from_str.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_146_two_sum.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_147_three_sum.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_148_max_subarray_kadane.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_149_sliding_window_max.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_150_rotate_array.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_151_find_duplicate.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_152_product_except_self.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_153_next_permutation.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_154_longest_increasing_subsequence.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_155_minimum_window_substr.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_156_find_median_sorted.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_157_search_rotated.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_158_valid_sudoku_row.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_159_pascal_triangle_row.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_160_spiral_matrix_order.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_161_jump_game.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_162_house_robber.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_163_climbing_stairs.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_164_min_cost_path.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_165_unique_paths.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_166_serialize_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_167_deserialize_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_168_run_length_2d.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_169_matrix_rotate_90.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_170_matrix_spiral.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_171_deep_copy_dict.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_172_sort_dict_by_value.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_173_merge_sorted_lists.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_174_partition_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_175_list_intersection.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_176_group_by_key.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_177_flatten_dict.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_178_zip_lists.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_179_chunk_list.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_180_transpose_matrix.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_181_aho_corasick_search.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_182_suffix_array_build.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_183_segment_tree_range_sum.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_184_fenwick_tree.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_185_union_find_with_rank.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_186_avl_tree_insert.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_187_red_black_insert_stub.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_188_trie_insert_search.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_189_bloom_filter_simple.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_190_consistent_hash_ring.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_191_huffman_encode.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_192_run_length_encode_advanced.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_193_boyer_moore_search.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_194_kmp_search.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_195_z_function.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_196_manacher_algorithm.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_197_ford_fulkerson_max_flow.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_198_bellman_ford.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_199_floyd_warshall.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_200_a_star_search.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_001_sum_array.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_002_max_array.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_003_min_array.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_004_reverse_string.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_005_is_palindrome.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_006_capitalize_first.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_007_is_even.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_008_factorial.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_009_fibonacci.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_010_flatten_once.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_011_unique_array.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_012_count_occurrences.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_013_clamp.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_014_to_title_case.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_015_truncate.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_016_repeat.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_017_is_prime.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_018_gcd.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_019_lcm.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_020_range.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_021_bubble_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_022_insertion_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_023_selection_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_024_merge_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_025_quick_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_026_binary_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_027_linear_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_028_jump_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_029_shell_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_030_heap_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_031_counting_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_032_radix_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_033_interpolation_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_034_ternary_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_035_exponential_search.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_036_longest_common_prefix.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_037_is_anagram.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_038_caesar_cipher.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_039_run_length_encode.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_040_reverse_words.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_041_camel_to_snake.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_042_snake_to_camel.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_043_word_frequency.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_044_most_frequent_char.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_045_balanced_brackets.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_046_chunk_array.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_047_zip_arrays.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_048_group_by.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_049_flatten_deep.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_050_deep_clone.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_051_debounce.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_052_throttle.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_053_memoize.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_054_pipe.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_055_curry.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_056_two_sum.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_057_max_subarray_kadane.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_058_longest_increasing_subsequence.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_059_edit_distance.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_060_knapsack_01.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_061_coin_change.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_062_longest_common_subsequence.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_063_matrix_chain_mult.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_064_dijkstra.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_065_topological_sort.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_066_trapping_rain_water.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_067_merge_intervals.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_068_word_break.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_069_regex_match.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_070_wildcard_match.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_071_binary_tree_level_order.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_072_largest_rectangle_histogram.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_073_median_two_sorted_arrays.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_074_skyline_problem.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_075_n_queens.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_076_square.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_077_cube.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_078_absoluteValue.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_079_sign.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_080_isPowerOfTwo.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_081_isInteger.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_082_roundTo.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_083_celsiusToFahrenheit.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_084_fahrenheitToCelsius.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_085_degreesToRadians.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_086_radiansToDegrees.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_087_percentOf.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_088_average.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_089_median.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_090_mode.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_091_isAnagramSimple.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_092_countVowels.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_093_removeSpaces.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_094_reverseArray.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_095_arrayProduct.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_096_firstNFibonacci.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_097_sumOfDigits.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_098_digitCount.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_099_isLeapYear.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_100_daysInMonth.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_101_safeJsonParse.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_102_safeGet.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_103_retryAsync.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_104_withTimeout.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_105_validateEmail.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_106_validateUrl.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_107_validateCreditCard.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_108_parseQueryString.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_109_buildQueryString.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_110_sanitizeHtml.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_111_deepEqual.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_112_shallowEqual.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_113_omitKeys.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_114_pickKeys.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_115_mergeDeep.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_116_invertObject.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_117_flattenObject.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_118_unflattenObject.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_119_csvToJson.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_120_jsonToCsv.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_121_sortByKey.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_122_groupAndCount.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_123_normalizeArray.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_124_rotateMatrix.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_125_transposeMatrix.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_126_slidingWindowMax.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_127_productExceptSelf.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_128_nextPermutation.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_129_threeSum.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_130_containerWithMostWater.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_131_minimumWindowSubstring.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_132_spiralOrder.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_133_matrixMultiply.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_134_longestConsecutive.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_135_findMedianSortedArrays.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_136_trieInsertSearch.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_137_unionFind.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_138_segmentTree.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_139_fenwickTree.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_140_lruCache.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_141_priorityQueue.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_142_graphBFS.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_143_graphDFS.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_144_kmpSearch.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_145_zAlgorithm.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_146_huffmanCoding.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_147_aStarSearch.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_148_floydWarshall.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_149_bellmanFord.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_150_nQueens.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  }
+]
