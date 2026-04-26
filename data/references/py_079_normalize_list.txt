@@ -1,0 +1,1 @@
+Min-max normalizes a list of floats into the range [0.0, 1.0] using the formula (v - min) / (max - min), returning a new list. Returns an empty list for empty input and a list of zeros when all values are equal (avoiding the division-by-zero from a degenerate range). Runs in O(n) time and space; does not mutate the input and does not handle NaN or infinite values specially.
