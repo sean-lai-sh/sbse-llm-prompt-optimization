@@ -1,0 +1,1 @@
+Returns the absolute value of n using a simple ternary that negates the input when it is less than zero. It runs in constant time and avoids calling Math.abs, but inherits the usual IEEE-754 quirks: NaN passes through unchanged because the comparison NaN < 0 is false, and -0 is returned as 0 only via negation while +0 is returned as-is.

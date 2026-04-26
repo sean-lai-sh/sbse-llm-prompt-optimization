@@ -1,0 +1,1 @@
+Returns the square of the input number n, computed as n * n in constant time and space. The function does not validate its input, so non-finite values such as NaN propagate (NaN * NaN is NaN) and very large magnitudes can overflow to Infinity under IEEE-754 double precision. Negative inputs yield positive outputs by the usual sign rule.
