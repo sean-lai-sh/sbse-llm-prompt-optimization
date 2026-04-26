@@ -1,0 +1,1 @@
+Computes the n-th Fibonacci number using naive double recursion: returns n for n in {0, 1} and otherwise fib_recursive(n-1) + fib_recursive(n-2). Raises ValueError for negative n. Runs in exponential O(phi^n) time and O(n) recursion depth with no memoization, so it is impractical for moderately large n.

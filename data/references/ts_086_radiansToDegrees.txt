@@ -1,0 +1,1 @@
+Converts an angle rad in radians to degrees using (rad * 180) / Math.PI, returning a number in constant time. No range normalization is performed, so outputs can be negative or larger than 360 depending on the input. NaN and +/-Infinity propagate, and standard floating-point rounding error applies because Math.PI is only an approximation of pi.

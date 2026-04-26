@@ -1,0 +1,1 @@
+Pairs corresponding elements of two lists into a list of 2-tuples, truncating to the shorter input's length like the built-in zip. It computes length = min(len(l1), len(l2)) and uses an index-based list comprehension to produce the result in O(length) time and space. Empty inputs return an empty list, and elements past the shorter list's length are silently discarded.

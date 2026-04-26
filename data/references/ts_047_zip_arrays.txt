@@ -1,0 +1,1 @@
+Zips two arrays element-wise into an array of [A, B] tuples up to the length of the shorter input. It is generic over A and B, taking an A[] and a B[] and returning [A, B][] in O(min(len_a, len_b)) time and proportional space. Excess elements in the longer array are silently truncated, and an empty input on either side yields an empty result without throwing.
