@@ -1,0 +1,40 @@
+# GA experiment configuration
+# All tuneable parameters are defined here so scripts need no hard-coded values.
+
+ga:
+  population_size: 20
+  generations: 30
+  elite_count: 2
+  crossover_rate: 0.7
+  mutation_rate: 0.3
+  tournament_k: 3
+
+improver:
+  # NVIDIA NIM model used for LLM-guided directed mutation.
+  # Must be a model available on https://integrate.api.nvidia.com/v1
+  model: "meta/llama-3.1-70b-instruct"
+  # How many top candidates to feed into the improver each generation.
+  top_k: 3
+  # How many improved variants to inject into the next generation.
+  num_variants: 5
+  # Optional on-disk cache directory for NIM responses (relative to repo root).
+  # cache_dir: ".nim_cache"
+
+target_model:
+  # NVIDIA NIM model held fixed throughout the experiment.
+  model: "meta/llama-3.3-70b-instruct"
+  temperature: 0
+
+fitness:
+  max_prompt_tokens: 200
+  lambda_len: 0.1
+  lambda_fmt: 0.2
+  # Number of function/reference pairs used during per-generation fast eval.
+  # Set to null to use the full benchmark (500 files).
+  eval_subset: 50
+
+paths:
+  functions_dir: "data/functions"
+  references_dir: "data/references"
+  results_dir: "results"
+  component_bank: "data/component_bank.json"
