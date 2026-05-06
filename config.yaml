@@ -5,6 +5,13 @@ improver:
   top_k: 3                              # number of top prompts fed to the improver
   n_variants: 3                         # improved variants generated per generation
 
+target_model:
+  model: meta/llama-3.3-70b-instruct    # fixed NIM model for fitness evaluation
+  temperature: 0                        # deterministic outputs
+  max_tokens: 512
+  retry_attempts: 3
+  retry_initial_backoff_seconds: 1.0
+
 ga:
   population_size: 20
   generations: 30
