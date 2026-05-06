@@ -17,7 +17,11 @@ fitness:
   max_prompt_tokens: 200
   lambda_len: 0.1
   lambda_fmt: 0.2
-  alpha: 0.5  # blend weight: alpha * ROUGE-L + (1 - alpha) * cosine
+  alpha: 0.5  # blend weight: alpha * ROUGE-L + (1 - alpha) * calibrated_cosine
+  cosine_baseline: 0.45  # raw cosine on random unmatched pairs; rescaled
+                         # via (raw - baseline) / (1 - baseline) so the
+                         # blend is comparable to ROUGE-L. Re-derive with
+                         # scripts/calibrate_cosine_baseline.py.
 
 evaluation:
   eval_subset: null   # null = use all 500 files; set to an int for fast inner-loop evals

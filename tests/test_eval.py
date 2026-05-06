@@ -105,6 +105,44 @@ def test_batch_empty_inputs_returns_empty_list() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Calibration: linear baseline rescale.
+# ---------------------------------------------------------------------------
+
+
+def test_calibrate_cosine_identity_maps_to_one() -> None:
+    assert eval_mod.calibrate_cosine(1.0, 0.45) == pytest.approx(1.0)
+
+
+def test_calibrate_cosine_at_baseline_maps_to_zero() -> None:
+    assert eval_mod.calibrate_cosine(0.45, 0.45) == pytest.approx(0.0)
+
+
+def test_calibrate_cosine_below_baseline_clamped_to_zero() -> None:
+    assert eval_mod.calibrate_cosine(0.1, 0.45) == 0.0
+
+
+def test_calibrate_cosine_above_baseline_rescaled() -> None:
+    # midpoint between baseline (0.45) and 1.0 should land at 0.5
+    midpoint = (0.45 + 1.0) / 2
+    assert eval_mod.calibrate_cosine(midpoint, 0.45) == pytest.approx(0.5, abs=1e-6)
+
+
+def test_calibrate_cosine_rejects_invalid_baseline() -> None:
+    with pytest.raises(ValueError, match="baseline"):
+        eval_mod.calibrate_cosine(0.8, 1.0)
+    with pytest.raises(ValueError, match="baseline"):
+        eval_mod.calibrate_cosine(0.8, -0.1)
+
+
+def test_calibrate_cosine_batch_matches_scalar() -> None:
+    raws = [0.1, 0.45, 0.7, 1.0]
+    batched = eval_mod.calibrate_cosine_batch(raws, baseline=0.45)
+    scalar = [eval_mod.calibrate_cosine(r, 0.45) for r in raws]
+    for b, s in zip(batched, scalar):
+        assert b == pytest.approx(s, abs=1e-6)
+
+
+# ---------------------------------------------------------------------------
 # evaluate_prompt: target_model is mocked, embedder is mocked for speed/math.
 # ---------------------------------------------------------------------------
 

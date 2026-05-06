@@ -98,6 +98,38 @@ def cosine_similarity_score(generated: str, reference: str) -> float:
     return cosine_similarity_batch([generated], [reference])[0]
 
 
+def calibrate_cosine(raw: float, baseline: float) -> float:
+    """Linearly rescale raw cosine to [0, 1] given an empirical baseline.
+
+    BGE-style sentence embedders return non-trivial similarity (~0.4-0.5)
+    even for unrelated short text, which would let the GA earn fitness for
+    producing any plausible English regardless of relevance. Rescaling so
+    the baseline maps to 0 and identical inputs map to 1 restores a
+    meaningful signal that can be blended cleanly with ROUGE-L (which
+    already lives on [0, 1]) under the alpha weight in config.yaml.
+
+        calibrated = max(0, (raw - baseline) / (1 - baseline))
+
+    The default baseline (0.45) is a starting estimate; run
+    `scripts/calibrate_cosine_baseline.py` (issue forthcoming) to
+    re-derive it empirically from random unmatched pairs in the
+    benchmark.
+    """
+    if not 0.0 <= baseline < 1.0:
+        raise ValueError(f"baseline must be in [0, 1), got {baseline}")
+    rescaled = (raw - baseline) / (1.0 - baseline)
+    return max(0.0, min(1.0, rescaled))
+
+
+def calibrate_cosine_batch(raw: list[float], baseline: float) -> list[float]:
+    """Vectorized calibration for the GA inner loop. See `calibrate_cosine`."""
+    if not 0.0 <= baseline < 1.0:
+        raise ValueError(f"baseline must be in [0, 1), got {baseline}")
+    arr = (np.asarray(raw, dtype=np.float32) - baseline) / (1.0 - baseline)
+    arr = np.clip(arr, 0.0, 1.0)
+    return [float(x) for x in arr]
+
+
 def _read_text(path: Path) -> str:
     return Path(path).read_text(encoding="utf-8")
 
