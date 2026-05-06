@@ -1,12 +1,18 @@
 """Fixed target model for the GA fitness evaluation loop.
 
-This module wraps the NVIDIA NIM OpenAI-compatible chat completions API and
+This module wraps the OpenRouter OpenAI-compatible chat completions API and
 exposes a single function, :func:`generate_summary`, that the fitness module
 (issue #7) calls once per (function x candidate prompt) in the GA inner loop.
 
 The target model is held FIXED across the entire experiment -- only the
 prompt template evolves. Determinism (``temperature=0``) and reliability
 (retries with exponential backoff) are therefore important.
+
+Note: ``src/improver.py`` (the directed-mutation prompt improver, gated by
+``--use-improver``) independently uses NVIDIA NIM. The two providers are
+intentional -- swapping the target model to OpenRouter avoids NIM's
+4500/5h request cap on the experiment's hot path while leaving the
+optional improver ablation pinned to the original NIM endpoint.
 
 Contract
 --------
@@ -35,8 +41,8 @@ from typing import Any, Optional
 import openai
 from dotenv import load_dotenv
 
-NIM_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_MODEL = "meta/llama-3.3-70b-instruct"
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b"
 DEFAULT_TEMPERATURE = 0.0
 DEFAULT_MAX_TOKENS = 512
 DEFAULT_RETRY_ATTEMPTS = 3
@@ -123,7 +129,7 @@ def generate_summary(
     config_path: Optional[Path] = None,
     client: Optional[Any] = None,
 ) -> str:
-    """Call the NIM target model to produce a summary for ``code``.
+    """Call the OpenRouter target model to produce a summary for ``code``.
 
     Args:
         prompt: Assembled instruction block (role/task/guard/format). Sent as
@@ -132,8 +138,8 @@ def generate_summary(
         model: Override the model id; defaults to the value in
             ``config.yaml``'s ``target_model.model`` section, or
             :data:`DEFAULT_MODEL`.
-        api_key: Override the NVIDIA API key; defaults to the
-            ``NVIDIA_API_KEY`` environment variable (loaded from ``.env``).
+        api_key: Override the OpenRouter API key; defaults to the
+            ``OPENROUTER_API_KEY`` environment variable (loaded from ``.env``).
         config_path: Override the path to ``config.yaml`` (mainly for tests).
         client: Optional pre-built OpenAI-compatible client (mainly for
             tests). When provided, ``api_key`` is not required.
@@ -143,7 +149,7 @@ def generate_summary(
         whitespace stripped.
 
     Raises:
-        ValueError: ``NVIDIA_API_KEY`` is missing and no ``client`` was
+        ValueError: ``OPENROUTER_API_KEY`` is missing and no ``client`` was
             provided.
         openai.APIStatusError: HTTP 4xx response (surfaced immediately).
         openai.APIError: After ``retry_attempts`` transient failures.
@@ -164,13 +170,15 @@ def generate_summary(
     if client is None:
         if api_key is None:
             load_dotenv()
-            api_key = os.environ.get("NVIDIA_API_KEY")
+            api_key = os.environ.get("OPENROUTER_API_KEY")
         if not api_key:
             raise ValueError(
-                "NVIDIA_API_KEY is not set. Add it to your .env file "
+                "OPENROUTER_API_KEY is not set. Add it to your .env file "
                 "(see .env.example)."
             )
-        client = openai.OpenAI(base_url=NIM_BASE_URL, api_key=api_key, max_retries=0)
+        client = openai.OpenAI(
+            base_url=OPENROUTER_BASE_URL, api_key=api_key, max_retries=0
+        )
 
     messages = [
         {"role": "system", "content": prompt},
