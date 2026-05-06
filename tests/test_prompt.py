@@ -39,6 +39,25 @@ def test_render_preserves_component_order(sample_template: PromptTemplate) -> No
     assert positions == sorted(positions)
 
 
+def test_render_instructions_omits_code(sample_template: PromptTemplate) -> None:
+    instructions = sample_template.render_instructions()
+    code = "def add(a, b):\n    return a + b"
+    assert code not in instructions
+    assert "Function:" not in instructions
+    for field in COMPONENT_FIELDS:
+        assert getattr(sample_template, field) in instructions
+
+
+def test_render_instructions_preserves_component_order(
+    sample_template: PromptTemplate,
+) -> None:
+    instructions = sample_template.render_instructions()
+    positions = [
+        instructions.index(getattr(sample_template, f)) for f in COMPONENT_FIELDS
+    ]
+    assert positions == sorted(positions)
+
+
 def test_to_dict_roundtrip(sample_template: PromptTemplate) -> None:
     restored = PromptTemplate.from_dict(sample_template.to_dict())
     assert restored == sample_template

@@ -31,6 +31,21 @@ class PromptTemplate:
             f"Function:\n{code}"
         )
 
+    def render_instructions(self) -> str:
+        """Render only the instruction components (role/task/guard/format).
+
+        Unlike :meth:`render`, this does not embed any code. It is intended for
+        callers (e.g. the GA fitness module, issue #7) that pass the
+        instructions as a system message and the code as a separate user
+        message to the target model.
+        """
+        return (
+            f"{self.role}\n\n"
+            f"{self.task}\n\n"
+            f"{self.guard}\n\n"
+            f"{self.format}"
+        )
+
     def to_dict(self) -> dict[str, str]:
         return asdict(self)
 
