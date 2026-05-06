@@ -128,7 +128,10 @@ def _default_benchmark(
         p for p in functions_dir.iterdir()
         if p.is_file() and p.suffix in SUPPORTED_EXT
     )
-    refs_by_stem = {p.stem: p for p in references_dir.iterdir() if p.is_file()}
+    refs_by_stem = {
+        p.stem: p for p in references_dir.iterdir()
+        if p.is_file() and not p.name.startswith(".")
+    }
 
     fn_stems = {p.stem for p in functions}
     missing_refs = sorted(fn_stems - refs_by_stem.keys())
@@ -257,7 +260,11 @@ def run_ga(
 
     if bank is None:
         bank = load_component_bank()
-    if functions is None or references is None:
+    if (functions is None) != (references is None):
+        raise ValueError(
+            "functions and references must be provided together or both omitted"
+        )
+    if functions is None:
         functions, references = _default_benchmark()
 
     if output_dir is None:
