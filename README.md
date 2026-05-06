@@ -35,6 +35,10 @@ The GA optimizes the blended score directly. Per-metric breakdowns (ROUGE-L only
 2. Each candidate prompt is scored against `/data/references` using the blended fitness above
 3. GA is compared against a Random Search baseline (same evaluation budget) using a Wilcoxon rank-sum test (α = 0.05) on best-of-trial fitness, with Cliff's delta for effect size
 
+## Target model
+
+The fixed target model is `nvidia/nemotron-3-super-120b-a12b` served via OpenRouter (`src/target_model.py`, requires `OPENROUTER_API_KEY` in `.env`). It is held FIXED for the duration of any experiment — only the prompt template evolves. The optional directed-mutation improver (`src/improver.py`, gated by `--use-improver`) independently uses NVIDIA NIM and is not part of the core GA-vs-RS comparison.
+
 ## Validation
 
 Statistical validation is the GA-vs-RS comparison itself: if GA's best-fitness distribution beats RS's at p < 0.05 with non-negligible effect size, the search is doing meaningful work beyond random sampling. Per-metric breakdowns let us check whether GA's gains come from improved ROUGE-L, improved cosine, or both — useful for the ablation discussion.

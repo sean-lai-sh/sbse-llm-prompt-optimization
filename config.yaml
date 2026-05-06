@@ -6,7 +6,7 @@ improver:
   n_variants: 3                         # improved variants generated per generation
 
 target_model:
-  model: meta/llama-3.3-70b-instruct    # fixed NIM model for fitness evaluation
+  model: nvidia/nemotron-3-super-120b-a12b   # fixed OpenRouter model for fitness evaluation
   temperature: 0                        # deterministic outputs
   max_tokens: 512
   retry_attempts: 3
