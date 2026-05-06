@@ -45,8 +45,17 @@ class FitnessConfig:
 
     @classmethod
     def from_yaml(cls, path: Path = DEFAULT_CONFIG_PATH) -> "FitnessConfig":
-        raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
-        section = raw.get("fitness", {})
+        # Empty file -> safe_load returns None; treat as no overrides.
+        raw = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+        if not isinstance(raw, dict):
+            raise ValueError(
+                f"{path}: expected a top-level mapping, got {type(raw).__name__}"
+            )
+        section = raw.get("fitness", {}) or {}
+        if not isinstance(section, dict):
+            raise ValueError(
+                f"{path}: 'fitness' must be a mapping, got {type(section).__name__}"
+            )
         # Drop unknown keys so a future config addition doesn't crash old code.
         known = {f for f in cls.__dataclass_fields__}
         return cls(**{k: v for k, v in section.items() if k in known})
@@ -132,11 +141,17 @@ def score_prompt(
     if not fns:
         raise ValueError("benchmark is empty")
 
-    if eval_subset is not None and eval_subset < len(fns):
-        rng = random.Random(seed)
-        chosen = rng.sample(range(len(fns)), eval_subset)
-        fns = [fns[i] for i in chosen]
-        refs = [refs[i] for i in chosen]
+    if eval_subset is not None:
+        if eval_subset < 1:
+            raise ValueError(
+                f"eval_subset must be >= 1 when set, got {eval_subset}"
+            )
+        # eval_subset >= len(fns) is a no-op: we use the full benchmark.
+        if eval_subset < len(fns):
+            rng = random.Random(seed)
+            chosen = rng.sample(range(len(fns)), eval_subset)
+            fns = [fns[i] for i in chosen]
+            refs = [refs[i] for i in chosen]
 
     scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
 

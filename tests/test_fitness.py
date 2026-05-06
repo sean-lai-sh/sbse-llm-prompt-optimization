@@ -18,7 +18,6 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from src import eval as eval_mod
 from src import fitness as fitness_mod
 from src.fitness import FitnessConfig, score_prompt
 from src.prompt import PromptTemplate
@@ -291,6 +290,32 @@ def test_empty_benchmark_raises() -> None:
                      config=FitnessConfig())
 
 
+@pytest.mark.parametrize("bad", [0, -1, -100])
+def test_eval_subset_rejects_non_positive(benchmark, bad) -> None:
+    fns, refs = benchmark
+    with pytest.raises(ValueError, match="eval_subset"):
+        score_prompt(_mk_template(), fns, refs,
+                     generate_summary=_make_gen(["x"] * len(fns)),
+                     config=FitnessConfig(),
+                     eval_subset=bad)
+
+
+def test_eval_subset_larger_than_benchmark_uses_full(benchmark) -> None:
+    fns, refs = benchmark
+    calls: list[str] = []
+
+    def gen(t, c):  # noqa: ARG001
+        calls.append(c)
+        return "ok"
+
+    with patch.object(fitness_mod, "cosine_similarity_batch", return_value=[0.5] * len(fns)):
+        score_prompt(_mk_template(), fns, refs,
+                     generate_summary=gen,
+                     config=FitnessConfig(),
+                     eval_subset=999, seed=0)
+    assert len(calls) == len(fns)
+
+
 # ---------------------------------------------------------------------------
 # Config loading
 # ---------------------------------------------------------------------------
@@ -334,3 +359,32 @@ def test_repo_config_yaml_loads_cleanly() -> None:
     config = FitnessConfig.from_yaml()
     assert 0.0 <= config.alpha <= 1.0
     assert 0.0 <= config.cosine_baseline < 1.0
+
+
+def test_fitness_config_handles_empty_yaml(tmp_path: Path) -> None:
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text("", encoding="utf-8")
+    # Empty file -> all defaults.
+    config = FitnessConfig.from_yaml(cfg)
+    assert config == FitnessConfig()
+
+
+def test_fitness_config_rejects_non_mapping_top_level(tmp_path: Path) -> None:
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text("- just\n- a list\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="mapping"):
+        FitnessConfig.from_yaml(cfg)
+
+
+def test_fitness_config_rejects_non_mapping_fitness_section(tmp_path: Path) -> None:
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text("fitness: not_a_dict\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="fitness"):
+        FitnessConfig.from_yaml(cfg)
+
+
+def test_fitness_config_handles_missing_fitness_section(tmp_path: Path) -> None:
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text("ga:\n  population_size: 20\n", encoding="utf-8")
+    config = FitnessConfig.from_yaml(cfg)
+    assert config == FitnessConfig()
