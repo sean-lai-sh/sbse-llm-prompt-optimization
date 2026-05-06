@@ -39,18 +39,43 @@ def _find_template_files(results_dir: Path) -> list[Path]:
 def _pair_benchmark(
     functions_dir: Path, references_dir: Path
 ) -> tuple[list[Path], list[Path]]:
-    """Pair function files to reference files by stem."""
-    functions = sorted(p for p in functions_dir.iterdir() if p.is_file())
+    """Pair every function file to its reference by stem.
+
+    The 'best of run' evaluation must score every benchmark item to be
+    comparable across runs, so any unpaired file is treated as an error
+    (rather than silently dropped) and surfaced with the offending stems.
+    """
+    SUPPORTED_EXT = {".py", ".js", ".ts"}
+    functions = sorted(
+        p for p in functions_dir.iterdir() if p.is_file() and p.suffix in SUPPORTED_EXT
+    )
     refs_by_stem = {p.stem: p for p in references_dir.iterdir() if p.is_file()}
 
-    paired_fn: list[Path] = []
-    paired_ref: list[Path] = []
-    for fn in functions:
-        ref = refs_by_stem.get(fn.stem)
-        if ref is None:
-            continue
-        paired_fn.append(fn)
-        paired_ref.append(ref)
+    fn_stems = {p.stem for p in functions}
+    missing_refs = sorted(fn_stems - refs_by_stem.keys())
+    orphan_refs = sorted(refs_by_stem.keys() - fn_stems)
+
+    if missing_refs or orphan_refs:
+        details = []
+        if missing_refs:
+            preview = ", ".join(missing_refs[:5])
+            suffix = "..." if len(missing_refs) > 5 else ""
+            details.append(
+                f"{len(missing_refs)} function(s) missing references: {preview}{suffix}"
+            )
+        if orphan_refs:
+            preview = ", ".join(orphan_refs[:5])
+            suffix = "..." if len(orphan_refs) > 5 else ""
+            details.append(
+                f"{len(orphan_refs)} reference(s) without functions: {preview}{suffix}"
+            )
+        raise ValueError(
+            "benchmark pairing is incomplete; cannot produce comparable "
+            "eval scores. " + " | ".join(details)
+        )
+
+    paired_fn = list(functions)
+    paired_ref = [refs_by_stem[fn.stem] for fn in functions]
     return paired_fn, paired_ref
 
 

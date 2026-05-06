@@ -183,33 +183,31 @@ def _mk_template() -> PromptTemplate:
     )
 
 
-def _make_target_model_module(generations: list[str]):
-    """Build a fake src.target_model module exposing generate_summary()."""
-    fake = MagicMock()
+def _make_generate_summary(generations: list[str]):
+    """Return an injectable generate_summary fake that yields each value in turn."""
     iterator = iter(generations)
 
-    def _gen(template, code):  # noqa: ARG001
+    def _gen(template: PromptTemplate, code: str) -> str:  # noqa: ARG001
         return next(iterator)
 
-    fake.generate_summary = MagicMock(side_effect=_gen)
-    return fake
+    return _gen
 
 
 def test_evaluate_prompt_returns_expected_shape(fake_benchmark) -> None:
     functions, references = fake_benchmark
     template = _mk_template()
 
-    fake_target_model = _make_target_model_module(
+    fake_gen = _make_generate_summary(
         ["Sums an array.", "Returns the maximum.", "Reverses a string."]
     )
 
     # Mock cosine_similarity_batch with controlled outputs so we can verify math.
     fake_cosines = [0.8, 0.6, 0.7]
 
-    with patch.dict(sys.modules, {"src.target_model": fake_target_model}), patch.object(
-        eval_mod, "cosine_similarity_batch", return_value=fake_cosines
-    ):
-        result = eval_mod.evaluate_prompt(template, functions, references)
+    with patch.object(eval_mod, "cosine_similarity_batch", return_value=fake_cosines):
+        result = eval_mod.evaluate_prompt(
+            template, functions, references, generate_summary=fake_gen
+        )
 
     assert set(result.keys()) == {"per_file", "aggregate"}
     assert len(result["per_file"]) == 3
@@ -236,14 +234,14 @@ def test_evaluate_prompt_aggregates_rouge_correctly(fake_benchmark) -> None:
     functions, references = fake_benchmark
     template = _mk_template()
 
-    # Make the target model echo the reference back, so ROUGE-L = 1.0 for all.
+    # Make the generator echo the reference back, so ROUGE-L = 1.0 for all.
     ref_texts = [p.read_text(encoding="utf-8").strip() for p in references]
-    fake_target_model = _make_target_model_module(ref_texts)
+    fake_gen = _make_generate_summary(ref_texts)
 
-    with patch.dict(sys.modules, {"src.target_model": fake_target_model}), patch.object(
-        eval_mod, "cosine_similarity_batch", return_value=[0.5, 0.5, 0.5]
-    ):
-        result = eval_mod.evaluate_prompt(template, functions, references)
+    with patch.object(eval_mod, "cosine_similarity_batch", return_value=[0.5, 0.5, 0.5]):
+        result = eval_mod.evaluate_prompt(
+            template, functions, references, generate_summary=fake_gen
+        )
 
     rouge_values = [entry["rouge_l"] for entry in result["per_file"]]
     for v in rouge_values:
@@ -258,12 +256,11 @@ def test_evaluate_prompt_filenames_match_inputs(fake_benchmark) -> None:
     functions, references = fake_benchmark
     template = _mk_template()
 
-    fake_target_model = _make_target_model_module(["a", "b", "c"])
-
-    with patch.dict(sys.modules, {"src.target_model": fake_target_model}), patch.object(
-        eval_mod, "cosine_similarity_batch", return_value=[0.1, 0.2, 0.3]
-    ):
-        result = eval_mod.evaluate_prompt(template, functions, references)
+    fake_gen = _make_generate_summary(["a", "b", "c"])
+    with patch.object(eval_mod, "cosine_similarity_batch", return_value=[0.1, 0.2, 0.3]):
+        result = eval_mod.evaluate_prompt(
+            template, functions, references, generate_summary=fake_gen
+        )
 
     expected = [p.name for p in functions]
     actual = [entry["filename"] for entry in result["per_file"]]
@@ -278,7 +275,20 @@ def test_evaluate_prompt_length_mismatch_raises(tmp_path: Path) -> None:
     ref1.write_text("a", encoding="utf-8")
     ref2.write_text("b", encoding="utf-8")
 
-    fake_target_model = _make_target_model_module(["x"])
-    with patch.dict(sys.modules, {"src.target_model": fake_target_model}):
-        with pytest.raises(ValueError, match="same length"):
-            eval_mod.evaluate_prompt(_mk_template(), [fn], [ref1, ref2])
+    fake_gen = _make_generate_summary(["x"])
+    with pytest.raises(ValueError, match="same length"):
+        eval_mod.evaluate_prompt(
+            _mk_template(), [fn], [ref1, ref2], generate_summary=fake_gen
+        )
+
+
+def test_evaluate_prompt_clear_error_when_target_model_missing(fake_benchmark) -> None:
+    """If target_model is unavailable and no callable is injected, raise a
+    helpful ImportError pointing at the fix instead of a generic stack trace."""
+    functions, references = fake_benchmark
+    template = _mk_template()
+
+    # Force the import inside _default_generate_summary to fail.
+    with patch.dict(sys.modules, {"src.target_model": None}):
+        with pytest.raises(ImportError, match="src.target_model"):
+            eval_mod.evaluate_prompt(template, functions, references)

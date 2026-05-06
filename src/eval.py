@@ -25,11 +25,17 @@ from __future__ import annotations
 
 import statistics
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable, Optional
 
 import numpy as np
 
 from src.prompt import PromptTemplate
+
+# Type alias for the generation callable that callers must supply to
+# evaluate_prompt. Concretely this is `src.target_model.generate_summary`
+# from issue #6, but accepting it as a parameter keeps this module
+# decoupled from the target-model API surface and trivially testable.
+GenerateSummaryFn = Callable[[PromptTemplate, str], str]
 
 _MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
@@ -143,19 +149,56 @@ def _aggregate(values: list[float]) -> tuple[float, float]:
     return float(mean), float(std)
 
 
+def _default_generate_summary() -> GenerateSummaryFn:
+    """Resolve the production target-model callable from `src.target_model`.
+
+    Imported lazily and wrapped so callers that never invoke `evaluate_prompt`
+    do not need `src.target_model` to be installed (it lands in issue #6 /
+    PR #15). Raises a clear, actionable error if the module is missing.
+    """
+    try:
+        from src.target_model import generate_summary as _gs  # noqa: PLC0415
+    except ImportError as exc:  # pragma: no cover -- exercised in scripts
+        raise ImportError(
+            "src.target_model.generate_summary is unavailable. Either merge "
+            "issue #6 (PR #15) or pass an explicit `generate_summary` "
+            "callable to evaluate_prompt(...)."
+        ) from exc
+
+    def _adapter(template: PromptTemplate, code: str) -> str:
+        # PR #15 exposes generate_summary(prompt: str, code: str) where
+        # `prompt` is the system message (instructions only) and `code` is
+        # the user message. Use render_instructions() so we do not send the
+        # function source twice.
+        return _gs(template.render_instructions(), code)
+
+    return _adapter
+
+
 def evaluate_prompt(
     template: PromptTemplate,
     functions: Iterable[Path],
     references: Iterable[Path],
+    generate_summary: Optional[GenerateSummaryFn] = None,
 ) -> dict:
     """Run `template` over the benchmark and return per-metric breakdowns.
 
     For each (function, reference) pair we:
       1. read the function source from disk
-      2. ask the target model (issue #6, `src.target_model.generate_summary`)
-         to summarize it using `template`
+      2. ask `generate_summary(template, code)` (or
+         `src.target_model.generate_summary` if not supplied) for a summary
       3. score the generation against the reference with both ROUGE-L and
          cosine similarity
+
+    Args:
+        template: the prompt template under evaluation
+        functions: iterable of function source files
+        references: iterable of paired reference summary files
+        generate_summary: optional callable `(template, code) -> str`. When
+            `None`, this resolves to `src.target_model.generate_summary` from
+            issue #6, raising a clear ImportError if that module is absent.
+            Passing it explicitly is recommended for tests and for consumers
+            who want to swap models or stub the call.
 
     Returns:
         {
@@ -163,16 +206,11 @@ def evaluate_prompt(
           "aggregate": {"rouge_l_mean": float, "rouge_l_std": float,
                         "cosine_mean": float, "cosine_std": float},
         }
-
-    Note: `src.target_model.generate_summary` is implemented in issue #6 and
-    may not be merged when this function is first called from a script. Tests
-    in `tests/test_eval.py` mock this dependency.
     """
     from rouge_score import rouge_scorer  # noqa: PLC0415
 
-    # Imported lazily so that unit tests which never call evaluate_prompt
-    # don't need src.target_model to exist on disk.
-    from src.target_model import generate_summary  # noqa: PLC0415
+    if generate_summary is None:
+        generate_summary = _default_generate_summary()
 
     func_paths = [Path(p) for p in functions]
     ref_paths = [Path(p) for p in references]
