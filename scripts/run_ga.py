@@ -53,13 +53,14 @@ def run_ga(config: dict, use_improver: bool, dry_run: bool) -> None:
     print("Improver module is ready and will be wired in when the GA is complete.")
 
     if use_improver:
-        print("\nImprover smoke-check (no real API call — set NVIDIA_API_KEY to run):")
+        print("\nImprover configuration preview (no API call is being made):")
         example_prompts = [
             "Summarize the function in 2-4 sentences.",
             "You are a senior engineer. Describe what this function does.",
         ]
-        print(f"  Would call improve_prompts(top_k={imp_cfg.get('top_k', 3)}, "
+        print(f"  Planned improve_prompts(top_k={imp_cfg.get('top_k', 3)}, "
               f"n={imp_cfg.get('n_variants', 3)}, model={imp_cfg.get('model')!r})")
+        print(f"  Example prompt count: {len(example_prompts)}")
 
 
 def main() -> int:

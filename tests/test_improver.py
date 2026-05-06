@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -203,3 +202,79 @@ def test_improve_prompts_passes_model_and_key(mock_openai_cls, tmp_path, monkeyp
     )
     call_kwargs = mock_client.chat.completions.create.call_args.kwargs
     assert call_kwargs["model"] == "nvidia/nemotron-4-340b-instruct"
+
+
+@patch("src.improver.openai.OpenAI")
+def test_improve_prompts_different_models_use_separate_cache(mock_openai_cls, tmp_path, monkeypatch):
+    """Two calls with different models must not share the same cache entry."""
+    monkeypatch.setattr("src.improver._CACHE_DIR", tmp_path)
+
+    mock_client = MagicMock()
+    mock_openai_cls.return_value = mock_client
+    mock_client.chat.completions.create.side_effect = [
+        _make_mock_response("Model A variant"),
+        _make_mock_response("Model B variant"),
+    ]
+
+    top = ["Prompt X"]
+    result_a = improve_prompts(top_prompts=top, n=1, generation=0,
+                               model="model-a", api_key="test-key")
+    result_b = improve_prompts(top_prompts=top, n=1, generation=0,
+                               model="model-b", api_key="test-key")
+
+    assert result_a == ["Model A variant"]
+    assert result_b == ["Model B variant"]
+    assert mock_client.chat.completions.create.call_count == 2
+
+
+@patch("src.improver.openai.OpenAI")
+def test_improve_prompts_corrupted_cache_is_treated_as_miss(mock_openai_cls, tmp_path, monkeypatch):
+    """A corrupted cache file should be silently ignored and treated as a cache miss."""
+    import json as _json
+
+    monkeypatch.setattr("src.improver._CACHE_DIR", tmp_path)
+
+    from src.improver import _prompt_hash, _cache_path
+    ph = _prompt_hash(["Prompt"])
+    cache_file = _cache_path(ph, 0, 1, "test-model")
+    cache_file.write_text("not valid json", encoding="utf-8")
+
+    mock_client = MagicMock()
+    mock_openai_cls.return_value = mock_client
+    mock_client.chat.completions.create.return_value = _make_mock_response("Fresh variant")
+
+    result = improve_prompts(top_prompts=["Prompt"], n=1, generation=0,
+                             model="test-model", api_key="test-key")
+
+    assert result == ["Fresh variant"]
+    mock_client.chat.completions.create.assert_called_once()
+
+
+@patch("src.improver.openai.OpenAI")
+def test_improve_prompts_max_retries_zero_raises_on_failure(mock_openai_cls, tmp_path, monkeypatch):
+    """max_retries=0 makes exactly one attempt; failure raises immediately without sleeping."""
+    monkeypatch.setattr("src.improver._CACHE_DIR", tmp_path)
+    import openai as oai
+
+    mock_client = MagicMock()
+    mock_openai_cls.return_value = mock_client
+    mock_client.chat.completions.create.side_effect = oai.APIStatusError(
+        "server error",
+        response=MagicMock(status_code=500),
+        body={},
+    )
+
+    with patch("src.improver.time.sleep") as mock_sleep:
+        with pytest.raises(oai.APIStatusError):
+            improve_prompts(top_prompts=["Prompt"], n=1, generation=0,
+                            api_key="test-key", max_retries=0)
+
+    assert mock_client.chat.completions.create.call_count == 1
+    mock_sleep.assert_not_called()
+
+
+def test_improve_prompts_negative_max_retries_raises_value_error():
+    """Negative max_retries is rejected immediately with ValueError."""
+    with pytest.raises(ValueError, match="max_retries"):
+        improve_prompts(top_prompts=["Prompt"], n=1, generation=0,
+                        api_key="test-key", max_retries=-1)

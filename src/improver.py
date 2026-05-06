@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import random
+import sys
 import time
 from pathlib import Path
 from typing import Optional
@@ -42,20 +43,28 @@ def _prompt_hash(prompts: list[str]) -> str:
     return hashlib.sha256(combined.encode()).hexdigest()[:16]
 
 
-def _cache_path(prompt_hash: str, generation: int, n: int) -> Path:
+def _cache_path(prompt_hash: str, generation: int, n: int, model: str) -> Path:
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    return _CACHE_DIR / f"{prompt_hash}_gen{generation}_n{n}.json"
+    safe_model = model.replace("/", "_")
+    return _CACHE_DIR / f"{prompt_hash}_gen{generation}_n{n}_{safe_model}.json"
 
 
-def _load_cache(prompt_hash: str, generation: int, n: int) -> Optional[list[str]]:
-    path = _cache_path(prompt_hash, generation, n)
+def _load_cache(prompt_hash: str, generation: int, n: int, model: str) -> Optional[list[str]]:
+    path = _cache_path(prompt_hash, generation, n, model)
     if path.exists():
-        return json.loads(path.read_text(encoding="utf-8"))
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            try:
+                path.unlink()
+            except OSError:
+                pass
+            return None
     return None
 
 
-def _save_cache(prompt_hash: str, generation: int, n: int, variants: list[str]) -> None:
-    _cache_path(prompt_hash, generation, n).write_text(
+def _save_cache(prompt_hash: str, generation: int, n: int, model: str, variants: list[str]) -> None:
+    _cache_path(prompt_hash, generation, n, model).write_text(
         json.dumps(variants), encoding="utf-8"
     )
 
@@ -82,16 +91,18 @@ def improve_prompts(
         generation: Current GA generation number (used for cache keying).
         model: NIM model identifier (configurable via config.yaml).
         api_key: NVIDIA_API_KEY; falls back to the environment variable if None.
-        max_retries: Number of retry attempts on transient API errors.
+        max_retries: Max number of retries on transient errors (0 = one attempt, no retries; must be >= 0).
 
     Returns:
         List of up to ``n`` improved prompt strings.
     """
+    if max_retries < 0:
+        raise ValueError(f"max_retries must be >= 0, got {max_retries}")
     if not top_prompts:
         return []
 
     ph = _prompt_hash(top_prompts)
-    cached = _load_cache(ph, generation, n)
+    cached = _load_cache(ph, generation, n, model)
     if cached is not None:
         return cached
 
@@ -111,7 +122,7 @@ def improve_prompts(
     delay = 2.0
     last_error: Exception | None = None
 
-    for attempt in range(max_retries):
+    for attempt in range(max_retries + 1):
         try:
             response = client.chat.completions.create(
                 model=model,
@@ -124,7 +135,7 @@ def improve_prompts(
             )
             raw = response.choices[0].message.content or ""
             variants = _parse_variants(raw, n)
-            _save_cache(ph, generation, n, variants)
+            _save_cache(ph, generation, n, model, variants)
             return variants
         except openai.RateLimitError as exc:
             last_error = exc
@@ -135,10 +146,15 @@ def improve_prompts(
                 raise
             last_error = exc
 
-        sleep_for = delay + random.uniform(0, 1)
-        print(f"  NIM retry {attempt + 1}/{max_retries} after {sleep_for:.1f}s: {last_error}")
-        time.sleep(sleep_for)
-        delay = min(delay * 2, 60.0)
+        print(
+            f"  NIM attempt {attempt + 1}/{max_retries + 1} failed: {last_error}",
+            file=sys.stderr,
+        )
+        if attempt < max_retries:
+            sleep_for = delay + random.uniform(0, 1)
+            print(f"  Retrying in {sleep_for:.1f}s ...", file=sys.stderr)
+            time.sleep(sleep_for)
+            delay = min(delay * 2, 60.0)
 
     assert last_error is not None
     raise last_error
