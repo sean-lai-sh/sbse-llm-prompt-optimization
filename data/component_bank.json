@@ -1,0 +1,54 @@
+{
+  "role": [
+    "You are a senior software engineer.",
+    "You are an expert code reviewer focused on clarity.",
+    "You are a technical writer specializing in API documentation.",
+    "You are a meticulous documentation generator for software projects.",
+    "You are a concise programming assistant.",
+    "You are an experienced engineer explaining code to a junior developer.",
+    "You are a code analysis tool that produces developer-facing summaries.",
+    "Act as a software documentation expert.",
+    "You are a precise technical communicator who explains code accurately.",
+    "You are a staff engineer responsible for keeping module documentation up to date.",
+    "You are a careful reader of source code who writes clear, factual descriptions."
+  ],
+  "task": [
+    "Summarize the following function in 2-4 sentences.",
+    "Describe what this function does, its inputs, and its outputs.",
+    "Write a concise natural-language description of the function below.",
+    "Explain the purpose and behavior of the function in plain prose.",
+    "Generate a documentation summary for the function provided.",
+    "Read the function and produce a brief summary of its behavior.",
+    "Write a docstring-style summary describing the function's role.",
+    "Provide a 1-3 sentence overview of what this function accomplishes.",
+    "Summarize what the function does, including any notable edge cases.",
+    "Describe the algorithmic intent of the function in human language.",
+    "Explain the function's behavior at the level a maintainer would need."
+  ],
+  "guard": [
+    "Do not include implementation details. Be concise.",
+    "Avoid restating the code line by line.",
+    "Do not speculate beyond what the code shows.",
+    "Stay strictly within the scope of the given function.",
+    "Do not add usage examples or describe call sites.",
+    "Avoid jargon when plain language suffices.",
+    "Do not include code in your response.",
+    "Be precise and avoid filler phrases.",
+    "Avoid markdown formatting and code fences in your output.",
+    "Do not include questions or hedging language.",
+    "Do not invent behavior the code does not exhibit."
+  ],
+  "format": [
+    "Respond in plain prose. No bullet points.",
+    "Output a single paragraph of natural language.",
+    "Respond using 2-4 declarative sentences.",
+    "Output as a single sentence summary.",
+    "Use plain text only - no headers, lists, or code blocks.",
+    "Respond with prose written in the present tense.",
+    "Output a brief paragraph with no preamble.",
+    "Format as a docstring-style description, omitting triple quotes.",
+    "Use third-person and present tense throughout.",
+    "Begin directly with the description; omit phrases like 'This function'.",
+    "Respond with one tight paragraph; do not introduce yourself or restate the task."
+  ]
+}
