@@ -170,7 +170,7 @@ def generate_summary(
                 "NVIDIA_API_KEY is not set. Add it to your .env file "
                 "(see .env.example)."
             )
-        client = openai.OpenAI(base_url=NIM_BASE_URL, api_key=api_key)
+        client = openai.OpenAI(base_url=NIM_BASE_URL, api_key=api_key, max_retries=0)
 
     messages = [
         {"role": "system", "content": prompt},
