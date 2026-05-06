@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  data-tests:
+    name: Data fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install minimal deps
+        run: pip install pytest
+      - name: Run data fixture tests
+        run: pytest tests/data -v
+
+  loop-tests:
+    name: Wire loop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install project deps
+        run: pip install -r requirements.txt
+      - name: Run wire-loop tests
+        env:
+          ANTHROPIC_API_KEY: dummy-ci-key
+          NVIDIA_API_KEY: dummy-ci-key
+          OPENROUTER_API_KEY: dummy-ci-key
+        run: pytest --ignore=tests/data -v
