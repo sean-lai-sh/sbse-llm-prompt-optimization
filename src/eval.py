@@ -1,0 +1,187 @@
+"""Evaluation utilities used inside the GA fitness function.
+
+This module supplies the cosine-similarity term that is blended with ROUGE-L
+inside the fitness function (issue #7):
+
+    fitness = alpha * ROUGE-L + (1 - alpha) * cosine
+              - lambda_len * length_penalty - lambda_fmt * format_penalty
+
+The GA inner loop hits these helpers ~500 functions x N candidates x N
+generations x N trials, so:
+
+* the sentence-transformer model (BAAI/bge-small-en-v1.5) is loaded **once**
+  via a lazy module-level cache and runs entirely as a local Hugging Face
+  inference -- no network calls per encode
+* the batched API encodes both lists in two `model.encode()` calls and
+  computes pairwise cosine in numpy
+
+`evaluate_prompt` is a higher-level helper used for offline reporting: it
+runs the target model over the full benchmark and returns per-file +
+aggregate ROUGE-L and cosine numbers. It is *not* called inside the GA inner
+loop; the GA fitness path uses `cosine_similarity_batch` directly.
+"""
+
+from __future__ import annotations
+
+import statistics
+from pathlib import Path
+from typing import Iterable
+
+import numpy as np
+
+from src.prompt import PromptTemplate
+
+_MODEL_NAME = "BAAI/bge-small-en-v1.5"
+
+# Lazily-instantiated singleton. We deliberately do NOT load at import time
+# because pytest collection should stay fast; the first call to an embedding
+# function pays the load cost, every subsequent call reuses the same weights.
+_model = None
+
+
+def _get_model():
+    """Return the cached sentence-transformer model, loading it on first use."""
+    global _model
+    if _model is None:
+        from sentence_transformers import SentenceTransformer  # noqa: PLC0415
+
+        _model = SentenceTransformer(_MODEL_NAME)
+    return _model
+
+
+def _normalize(matrix: np.ndarray) -> np.ndarray:
+    """Row-normalize an embedding matrix; rows that are all zero stay zero."""
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+    norms = np.where(norms == 0, 1.0, norms)
+    return matrix / norms
+
+
+def cosine_similarity_batch(generated: list[str], reference: list[str]) -> list[float]:
+    """Pairwise cosine similarity between two equal-length lists of strings.
+
+    Encodes each list in a single batched `model.encode()` call to amortize the
+    forward-pass cost across the 500-file benchmark. Returns a list of floats
+    in [-1.0, 1.0] (in practice [0.0, 1.0] for natural-language inputs).
+    """
+    if len(generated) != len(reference):
+        raise ValueError(
+            f"generated and reference must be the same length, "
+            f"got {len(generated)} and {len(reference)}"
+        )
+    if not generated:
+        return []
+
+    model = _get_model()
+    # convert_to_numpy keeps things light (no torch tensors leaking out)
+    gen_emb = np.asarray(
+        model.encode(generated, batch_size=32, show_progress_bar=False, convert_to_numpy=True),
+        dtype=np.float32,
+    )
+    ref_emb = np.asarray(
+        model.encode(reference, batch_size=32, show_progress_bar=False, convert_to_numpy=True),
+        dtype=np.float32,
+    )
+    gen_n = _normalize(gen_emb)
+    ref_n = _normalize(ref_emb)
+    sims = np.einsum("ij,ij->i", gen_n, ref_n)
+    # Clamp to [-1, 1] to absorb floating-point drift.
+    sims = np.clip(sims, -1.0, 1.0)
+    return [float(x) for x in sims]
+
+
+def cosine_similarity_score(generated: str, reference: str) -> float:
+    """Cosine similarity between a single (generated, reference) pair.
+
+    Thin wrapper over the batch API so call sites that already have lists
+    of texts get the amortized path automatically.
+    """
+    return cosine_similarity_batch([generated], [reference])[0]
+
+
+def _read_text(path: Path) -> str:
+    return Path(path).read_text(encoding="utf-8")
+
+
+def _aggregate(values: list[float]) -> tuple[float, float]:
+    if not values:
+        return 0.0, 0.0
+    mean = statistics.fmean(values)
+    # Use sample stdev when n>=2, else 0 (single point has no spread).
+    std = statistics.stdev(values) if len(values) >= 2 else 0.0
+    return float(mean), float(std)
+
+
+def evaluate_prompt(
+    template: PromptTemplate,
+    functions: Iterable[Path],
+    references: Iterable[Path],
+) -> dict:
+    """Run `template` over the benchmark and return per-metric breakdowns.
+
+    For each (function, reference) pair we:
+      1. read the function source from disk
+      2. ask the target model (issue #6, `src.target_model.generate_summary`)
+         to summarize it using `template`
+      3. score the generation against the reference with both ROUGE-L and
+         cosine similarity
+
+    Returns:
+        {
+          "per_file": [{"filename": str, "rouge_l": float, "cosine": float}, ...],
+          "aggregate": {"rouge_l_mean": float, "rouge_l_std": float,
+                        "cosine_mean": float, "cosine_std": float},
+        }
+
+    Note: `src.target_model.generate_summary` is implemented in issue #6 and
+    may not be merged when this function is first called from a script. Tests
+    in `tests/test_eval.py` mock this dependency.
+    """
+    from rouge_score import rouge_scorer  # noqa: PLC0415
+
+    # Imported lazily so that unit tests which never call evaluate_prompt
+    # don't need src.target_model to exist on disk.
+    from src.target_model import generate_summary  # noqa: PLC0415
+
+    func_paths = [Path(p) for p in functions]
+    ref_paths = [Path(p) for p in references]
+    if len(func_paths) != len(ref_paths):
+        raise ValueError(
+            f"functions and references must be the same length, "
+            f"got {len(func_paths)} and {len(ref_paths)}"
+        )
+
+    scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
+
+    generations: list[str] = []
+    ref_texts: list[str] = []
+    rouge_scores: list[float] = []
+    filenames: list[str] = []
+
+    for fn_path, ref_path in zip(func_paths, ref_paths):
+        code = _read_text(fn_path)
+        ref_text = _read_text(ref_path).strip()
+        gen = generate_summary(template, code)
+        generations.append(gen)
+        ref_texts.append(ref_text)
+        filenames.append(fn_path.name)
+        rouge_scores.append(
+            float(scorer.score(ref_text, gen)["rougeL"].fmeasure)
+        )
+
+    cosine_scores = cosine_similarity_batch(generations, ref_texts)
+
+    per_file = [
+        {"filename": name, "rouge_l": rl, "cosine": co}
+        for name, rl, co in zip(filenames, rouge_scores, cosine_scores)
+    ]
+    rl_mean, rl_std = _aggregate(rouge_scores)
+    co_mean, co_std = _aggregate(cosine_scores)
+    return {
+        "per_file": per_file,
+        "aggregate": {
+            "rouge_l_mean": rl_mean,
+            "rouge_l_std": rl_std,
+            "cosine_mean": co_mean,
+            "cosine_std": co_std,
+        },
+    }
