@@ -98,15 +98,23 @@ def _find_completed_trials(output_root: Path, algo: str) -> dict[int, Path]:
 
 def _load_completed_trial(run_dir: Path) -> tuple[PromptTemplate, list[GenerationLog]]:
     """Reconstruct an algorithm's return value from a finished trial dir."""
-    best_template = PromptTemplate.from_dict(
-        json.loads((run_dir / "best.json").read_text(encoding="utf-8"))
-    )
+    try:
+        best_template = PromptTemplate.from_dict(
+            json.loads((run_dir / "best.json").read_text(encoding="utf-8"))
+        )
+    except (TypeError, KeyError) as exc:
+        raise ValueError(f"best.json in {run_dir} has invalid schema") from exc
     logs: list[GenerationLog] = []
     with (run_dir / "generations.jsonl").open(encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line:
-                logs.append(GenerationLog(**json.loads(line)))
+                try:
+                    logs.append(GenerationLog(**json.loads(line)))
+                except (TypeError, KeyError) as exc:
+                    raise ValueError(
+                        f"generations.jsonl in {run_dir} has invalid schema"
+                    ) from exc
     if not logs:
         raise ValueError(f"generations.jsonl in {run_dir} has no rows")
     return best_template, logs

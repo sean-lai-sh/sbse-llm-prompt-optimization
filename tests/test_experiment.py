@@ -401,3 +401,23 @@ def test_resume_reruns_empty_generations_even_with_best_json(tmp_path: Path) -> 
 
     assert len(ga_calls) == 1
     assert results[0].resumed is False
+
+
+def test_resume_reruns_invalid_generations_schema(tmp_path: Path) -> None:
+    d = tmp_path / "ga_trial_000_invalid_schema"
+    d.mkdir()
+    (d / "best.json").write_text(json.dumps(_mk_template().to_dict()), encoding="utf-8")
+    (d / "generations.jsonl").write_text("{}\n", encoding="utf-8")
+
+    ga_calls: list[dict] = []
+    results = run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.8, ga_calls)},
+        resume=True,
+    )
+
+    assert len(ga_calls) == 1
+    assert results[0].resumed is False
