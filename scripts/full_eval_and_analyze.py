@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-"""Re-score every trial's best.json on the FULL 500-function benchmark and
-run Wilcoxon + Cliff's delta on the result.
+"""Re-score every trial's best.json on the held-out test benchmark and run
+Wilcoxon + Cliff's delta on the result.
 
-Why: the in-loop fitness uses ``eval_subset=10``, so each trial's reported
-``best_blended`` is a noisy 10-function-subsample estimate (different
-trials may even see different 10 functions due to seed differences). For
-the final paper-grade comparison we want each trial's "winning prompt"
-re-evaluated on the *same* full benchmark so the per-trial numbers are
-comparable and the noise floor drops.
+Why a held-out test set: the GA's in-loop fitness uses ``eval_subset=10``
+sampled from the *training* set ``data/functions/``, so even a "full
+benchmark" eval against the same 500 functions would still be a train-set
+score (just with less subsampling noise). To make a generalization claim
+we evaluate on ``data/test/`` -- 50 functions and Opus-generated
+references the GA never saw during search.
 
 This script:
   1. Walks every ``<algo>_trial_*/best.json`` under ``--results-root``
-  2. Calls ``src.eval.evaluate_prompt`` on the full benchmark for each
-  3. Builds per-algorithm distributions of full-benchmark blended/ROUGE-L/
+  2. Calls ``src.eval.evaluate_prompt`` on the held-out test set for each
+  3. Builds per-algorithm distributions of test-set blended/ROUGE-L/
      cosine scores
   4. Runs the same Wilcoxon + Cliff's delta comparison as
-     ``analyze_results.py`` and writes ``full_benchmark_summary.json``
+     ``analyze_results.py`` and writes ``test_benchmark_summary.json``
 
 Usage:
     python scripts/full_eval_and_analyze.py \\
         --results-root results/experiment_<ts>/ \\
-        --output       results/experiment_<ts>/full_benchmark_summary.json
+        --output       results/experiment_<ts>/test_benchmark_summary.json
 """
 
 from __future__ import annotations
@@ -39,41 +39,80 @@ from src.fitness import FitnessConfig
 from src.prompt import PromptTemplate
 from src.stats import compare_distributions
 
-DEFAULT_FUNCTIONS_DIR = REPO_ROOT / "data" / "functions"
-DEFAULT_REFERENCES_DIR = REPO_ROOT / "data" / "references"
+DEFAULT_FUNCTIONS_DIR = REPO_ROOT / "data" / "test" / "functions"
+DEFAULT_REFERENCES_DIR = REPO_ROOT / "data" / "test" / "references"
 
 
-def _full_benchmark() -> tuple[list[Path], list[Path]]:
-    """Pair every .py/.js/.ts function with its same-stem reference."""
+def _benchmark_pairs(
+    functions_dir: Path, references_dir: Path
+) -> tuple[list[Path], list[Path]]:
+    """Pair every .py/.js/.ts function with its same-stem reference.
+
+    Same strict-pairing contract as the in-loop benchmark: any unpaired
+    file raises so a missing data file can't silently shrink the test set.
+    """
     SUPPORTED_EXT = {".py", ".js", ".ts"}
+    if not functions_dir.is_dir():
+        raise FileNotFoundError(f"functions dir not found: {functions_dir}")
+    if not references_dir.is_dir():
+        raise FileNotFoundError(f"references dir not found: {references_dir}")
     fns = sorted(
-        p for p in DEFAULT_FUNCTIONS_DIR.iterdir()
+        p for p in functions_dir.iterdir()
         if p.is_file() and p.suffix in SUPPORTED_EXT
     )
-    refs_by_stem = {p.stem: p for p in DEFAULT_REFERENCES_DIR.iterdir() if p.is_file()}
+    refs_by_stem = {p.stem: p for p in references_dir.iterdir() if p.is_file()}
     missing = [p.stem for p in fns if p.stem not in refs_by_stem]
     if missing:
-        raise ValueError(f"functions missing references: {missing[:5]}...")
+        raise ValueError(
+            f"functions missing references in {references_dir}: {missing[:5]}..."
+        )
+    if not fns:
+        raise ValueError(f"no benchmark pairs found under {functions_dir}")
     refs = [refs_by_stem[fn.stem] for fn in fns]
     return fns, refs
 
 
-def _score_trial_on_full_bench(
+def _score_trial_on_test_bench(
     trial_dir: Path,
     functions: list[Path],
     references: list[Path],
     cfg: FitnessConfig,
+    *,
+    generate_summary=None,
+    call_progress=None,
 ) -> dict:
-    """Re-score a trial's best template on the full benchmark.
+    """Re-score a trial's best template on the held-out test benchmark.
 
     Returns a dict with per-metric aggregates *plus* the calibrated cosine
     and the blended fitness, so it lines up with what generations.jsonl
     records.
+
+    When ``call_progress`` is provided, it's invoked once per
+    generate_summary call so the caller can drive a tqdm bar across the
+    whole eval pass.
     """
     template = PromptTemplate.from_dict(
         json.loads((trial_dir / "best.json").read_text(encoding="utf-8"))
     )
-    eval_result = evaluate_prompt(template, functions, references)
+
+    # If the caller wants live progress, wrap generate_summary so each call
+    # ticks the bar after returning.
+    eval_kwargs = {}
+    if call_progress is not None:
+        from src.eval import _default_generate_summary  # noqa: PLC0415
+        inner = generate_summary if generate_summary is not None else _default_generate_summary()
+
+        def _counted(*args, **kwargs):
+            try:
+                return inner(*args, **kwargs)
+            finally:
+                call_progress()
+
+        eval_kwargs["generate_summary"] = _counted
+    elif generate_summary is not None:
+        eval_kwargs["generate_summary"] = generate_summary
+
+    eval_result = evaluate_prompt(template, functions, references, **eval_kwargs)
     rouge_l = eval_result["aggregate"]["rouge_l_mean"]
     cosine_raw = eval_result["aggregate"]["cosine_mean"]
     # Apply the same calibration the GA uses.
@@ -97,11 +136,19 @@ def main() -> int:
     parser.add_argument("--results-root", type=Path, required=True,
                         help="experiment dir containing <algo>_trial_*/")
     parser.add_argument("--output", type=Path, required=True,
-                        help="path to write full_benchmark_summary.json")
+                        help="path to write test_benchmark_summary.json")
     parser.add_argument("--target", default="ga",
                         help="target algorithm prefix (default: ga)")
     parser.add_argument("--baseline", default="rs",
                         help="baseline algorithm prefix (default: rs)")
+    parser.add_argument("--functions-dir", type=Path, default=DEFAULT_FUNCTIONS_DIR,
+                        help="directory of test-set function source files "
+                             "(default: data/test/functions/)")
+    parser.add_argument("--references-dir", type=Path, default=DEFAULT_REFERENCES_DIR,
+                        help="directory of test-set reference summaries "
+                             "(default: data/test/references/)")
+    parser.add_argument("--no-progress", action="store_true",
+                        help="suppress the tqdm progress bar")
     args = parser.parse_args()
 
     grouped = discover_trial_dirs(args.results_root)
@@ -114,13 +161,34 @@ def main() -> int:
         return 1
 
     cfg = FitnessConfig.from_yaml()
-    functions, references = _full_benchmark()
+    functions, references = _benchmark_pairs(args.functions_dir, args.references_dir)
+    n_trials = len(grouped[args.target]) + len(grouped[args.baseline])
+    expected_calls = n_trials * len(functions)
     print(
         f"Re-scoring {len(grouped[args.target])} {args.target} trials "
         f"and {len(grouped[args.baseline])} {args.baseline} trials on "
-        f"the full {len(functions)}-function benchmark...",
+        f"the {len(functions)}-function held-out test set "
+        f"({expected_calls} total LLM calls)...",
         flush=True,
     )
+
+    # Single tqdm bar across the whole re-eval -- one tick per generate_summary
+    # call so the user sees live progress through all 20 templates x 50
+    # functions = 1000 calls.
+    if args.no_progress:
+        bar_ctx = None
+        tick = None
+    else:
+        from tqdm import tqdm  # noqa: PLC0415
+        bar_ctx = tqdm(
+            total=expected_calls,
+            desc="held-out eval",
+            unit="call",
+            dynamic_ncols=True,
+            mininterval=0.25,
+            smoothing=0.1,
+        )
+        tick = bar_ctx.update
 
     per_trial: dict[str, list[dict]] = {args.target: [], args.baseline: []}
     columns: dict[str, dict[str, list[float]]] = {
@@ -129,17 +197,27 @@ def main() -> int:
     }
     for algo in (args.target, args.baseline):
         for i, trial_dir in enumerate(grouped[algo], start=1):
-            scores = _score_trial_on_full_bench(trial_dir, functions, references, cfg)
+            scores = _score_trial_on_test_bench(
+                trial_dir, functions, references, cfg,
+                call_progress=(lambda: tick(1)) if tick is not None else None,
+            )
             per_trial[algo].append(scores)
             for k in columns[algo]:
                 columns[algo][k].append(scores[k])
-            print(
+            line = (
                 f"  [{algo}] {i}/{len(grouped[algo])} {trial_dir.name}: "
                 f"blended={scores['blended']:.4f} "
                 f"rougeL={scores['rouge_l']:.4f} "
-                f"cosCal={scores['cosine_calibrated']:.4f}",
-                flush=True,
+                f"cosCal={scores['cosine_calibrated']:.4f}"
             )
+            # Use tqdm.write so the bar isn't fragmented by per-trial prints.
+            if bar_ctx is not None:
+                bar_ctx.write(line)
+            else:
+                print(line, flush=True)
+
+    if bar_ctx is not None:
+        bar_ctx.close()
 
     comparisons = {}
     for metric in ("blended", "rouge_l", "cosine_raw", "cosine_calibrated"):
@@ -162,15 +240,17 @@ def main() -> int:
         }
 
     summary = {
-        "evaluation_kind": "full_benchmark",
+        "evaluation_kind": "held_out_test_set",
         "target_algorithm": args.target,
         "baseline_algorithm": args.baseline,
+        "functions_dir": str(args.functions_dir),
+        "references_dir": str(args.references_dir),
         "n_trials": {
             args.target: len(grouped[args.target]),
             args.baseline: len(grouped[args.baseline]),
         },
         "n_benchmark_pairs": len(functions),
-        "per_trial_full_eval": per_trial,
+        "per_trial_test_eval": per_trial,
         "comparisons": comparisons,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
