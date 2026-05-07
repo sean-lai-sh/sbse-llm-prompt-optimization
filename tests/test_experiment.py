@@ -7,6 +7,7 @@ output-dir layout, and that the progress callback fires.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -299,3 +300,43 @@ def test_resume_ignores_partial_trial_dir(tmp_path: Path) -> None:
     )
     # Trial 0 was incomplete -> ran fresh.
     assert len(ga_calls) == 1
+
+
+def test_resume_reruns_corrupt_completed_trial_dir(tmp_path: Path) -> None:
+    d = tmp_path / "ga_trial_000_corrupt"
+    d.mkdir()
+    (d / "best.json").write_text("{not-json}", encoding="utf-8")
+    (d / "generations.jsonl").write_text("{}", encoding="utf-8")
+
+    ga_calls: list[dict] = []
+    results = run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.8, ga_calls)},
+        resume=True,
+    )
+
+    assert len(ga_calls) == 1
+    assert results[0].resumed is False
+
+
+def test_resume_reruns_empty_generations_even_with_best_json(tmp_path: Path) -> None:
+    d = tmp_path / "ga_trial_000_empty"
+    d.mkdir()
+    (d / "best.json").write_text(json.dumps(_mk_template().to_dict()), encoding="utf-8")
+    (d / "generations.jsonl").write_text("", encoding="utf-8")
+
+    ga_calls: list[dict] = []
+    results = run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.8, ga_calls)},
+        resume=True,
+    )
+
+    assert len(ga_calls) == 1
+    assert results[0].resumed is False

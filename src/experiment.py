@@ -107,6 +107,8 @@ def _load_completed_trial(run_dir: Path) -> tuple[PromptTemplate, list[Generatio
             line = line.strip()
             if line:
                 logs.append(GenerationLog(**json.loads(line)))
+    if not logs:
+        raise ValueError(f"generations.jsonl in {run_dir} has no rows")
     return best_template, logs
 
 
@@ -163,10 +165,23 @@ def run_experiment(
         prior = _find_completed_trials(output_root, algo_name) if resume else {}
         for i in range(trials):
             seed = base_seed + i
+            resumed = False
             if i in prior:
                 # Resume: rebuild the TrialResult from the on-disk trial dir.
                 run_dir = prior[i]
-                best_template, logs = _load_completed_trial(run_dir)
+                try:
+                    best_template, logs = _load_completed_trial(run_dir)
+                    resumed = True
+                except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
+                    # Partial/corrupt prior output: rerun this trial fresh.
+                    ts = _utc_timestamp()
+                    run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
+                    best_template, logs = algo_fn(
+                        config,
+                        seed=seed,
+                        output_dir=run_dir,
+                        **algorithm_kwargs,
+                    )
             else:
                 ts = _utc_timestamp()
                 run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
@@ -187,7 +202,7 @@ def run_experiment(
                 output_dir=run_dir,
                 best_template=best_template,
                 best_blended=best_blended,
-                resumed=(i in prior),
+                resumed=resumed,
             )
             results.append(result)
             if progress is not None:

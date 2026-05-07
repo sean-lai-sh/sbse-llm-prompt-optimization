@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import pytest
+np = pytest.importorskip("numpy")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -87,6 +88,12 @@ def test_cliffs_delta_rejects_empty() -> None:
         cliffs_delta([], [0.5])
 
 
+def test_cliffs_delta_accepts_numpy_arrays() -> None:
+    delta, label = cliffs_delta(np.array([0.9, 0.95]), np.array([0.1, 0.2]))
+    assert delta > 0
+    assert label == "large"
+
+
 # ---------------------------------------------------------------------------
 # compare_distributions
 # ---------------------------------------------------------------------------
@@ -120,3 +127,8 @@ def test_compare_distributions_to_dict_is_serializable() -> None:
 def test_compare_distributions_rejects_empty() -> None:
     with pytest.raises(ValueError, match="non-empty"):
         compare_distributions([], [0.5], metric="blended")
+
+
+def test_compare_distributions_rejects_empty_numpy_arrays() -> None:
+    with pytest.raises(ValueError, match="non-empty"):
+        compare_distributions(np.array([]), np.array([0.5]), metric="blended")
