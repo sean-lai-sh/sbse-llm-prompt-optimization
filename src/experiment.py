@@ -112,6 +112,59 @@ def _load_completed_trial(run_dir: Path) -> tuple[PromptTemplate, list[Generatio
     return best_template, logs
 
 
+def _expected_calls_per_trial(config: dict) -> Optional[int]:
+    """Best-effort estimate of generate_summary calls per trial.
+
+    Used to size the per-trial tqdm progress bar. Returns None if we can't
+    reasonably guess (e.g. eval_subset is null AND we don't know the
+    benchmark size at this layer -- score_prompt would clamp to 500).
+    """
+    ga_cfg = config.get("ga") or {}
+    eval_cfg = config.get("evaluation") or {}
+    try:
+        p = int(ga_cfg.get("population_size", 0))
+        g = int(ga_cfg.get("generations", 0))
+    except (TypeError, ValueError):
+        return None
+    if p <= 0 or g <= 0:
+        return None
+    subset = eval_cfg.get("eval_subset")
+    if subset is None:
+        # score_prompt uses the full benchmark (500 in this repo).
+        subset = 500
+    try:
+        subset = int(subset)
+    except (TypeError, ValueError):
+        return None
+    if subset <= 0:
+        return None
+    return p * g * subset
+
+
+def _wrap_with_progress(
+    real_gen: Optional[Callable],
+    bar,
+) -> Callable:
+    """Wrap a generate_summary callable so each call ticks the tqdm bar.
+
+    ``real_gen`` may be None, in which case we lazily resolve the default
+    OpenRouter-backed implementation from ``src.eval`` on first call. This
+    matches what ``score_prompt`` would have done internally.
+    """
+
+    def _counted(*args, **kwargs):
+        nonlocal real_gen
+        if real_gen is None:
+            from src.eval import _default_generate_summary  # noqa: PLC0415
+            real_gen = _default_generate_summary()
+        try:
+            return real_gen(*args, **kwargs)
+        finally:
+            bar.update(1)
+
+    return _counted
+
+
 def run_experiment(
     config: dict,
     *,
@@ -122,6 +175,7 @@ def run_experiment(
     algorithm_overrides: Optional[dict[str, AlgorithmFn]] = None,
     base_seed: int = 0,
     resume: bool = True,
+    show_progress: bool = False,
     **algorithm_kwargs,
 ) -> list[TrialResult]:
     """Run `trials` independent runs of each algorithm with distinct seeds.
@@ -144,6 +198,10 @@ def run_experiment(
             ``generations.jsonl``), those trials are loaded from disk and
             their TrialResults are returned alongside any newly-run trials.
             Pass ``False`` to force re-running every trial regardless.
+        show_progress: when True, render a per-trial tqdm bar showing
+            generate_summary calls completed out of
+            ``population_size * generations * eval_subset``. Off by default
+            so unit tests stay quiet.
         **algorithm_kwargs: forwarded to every algorithm call (e.g.
             ``score_fn``, ``generate_summary``, ``functions``, ``references``).
 
@@ -160,12 +218,40 @@ def run_experiment(
     output_root = Path(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
 
+    expected_calls = _expected_calls_per_trial(config) if show_progress else None
+    if show_progress:
+        from tqdm import tqdm  # noqa: PLC0415
+
+    def _run_fresh_trial(algo_name, seed, run_dir, label):
+        """Wrap the algorithm call with a per-trial progress bar if enabled."""
+        if not show_progress or expected_calls is None:
+            return algo_fn(
+                config, seed=seed, output_dir=run_dir, **algorithm_kwargs
+            )
+        bar = tqdm(
+            total=expected_calls,
+            desc=label,
+            unit="call",
+            leave=True,
+            ncols=100,
+        )
+        try:
+            user_gen = algorithm_kwargs.get("generate_summary")
+            counted = _wrap_with_progress(user_gen, bar)
+            trial_kwargs = {**algorithm_kwargs, "generate_summary": counted}
+            return algo_fn(
+                config, seed=seed, output_dir=run_dir, **trial_kwargs
+            )
+        finally:
+            bar.close()
+
     results: list[TrialResult] = []
     for algo_name, algo_fn in chosen.items():
         prior = _find_completed_trials(output_root, algo_name) if resume else {}
         for i in range(trials):
             seed = base_seed + i
             resumed = False
+            label = f"{algo_name.upper()} trial {i:02d}/{trials - 1:02d}"
             if i in prior:
                 # Resume: rebuild the TrialResult from the on-disk trial dir.
                 run_dir = prior[i]
@@ -176,20 +262,14 @@ def run_experiment(
                     # Partial/corrupt prior output: rerun this trial fresh.
                     ts = _utc_timestamp()
                     run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
-                    best_template, logs = algo_fn(
-                        config,
-                        seed=seed,
-                        output_dir=run_dir,
-                        **algorithm_kwargs,
+                    best_template, logs = _run_fresh_trial(
+                        algo_name, seed, run_dir, label
                     )
             else:
                 ts = _utc_timestamp()
                 run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
-                best_template, logs = algo_fn(
-                    config,
-                    seed=seed,
-                    output_dir=run_dir,
-                    **algorithm_kwargs,
+                best_template, logs = _run_fresh_trial(
+                    algo_name, seed, run_dir, label
                 )
             best_blended = max(
                 (log.best_blended for log in logs), default=float("-inf")

@@ -95,6 +95,10 @@ def main() -> int:
                              "contains completed trial directories. Default is "
                              "to load completed trials from disk and only run "
                              "the missing ones.")
+    parser.add_argument("--no-progress", action="store_true",
+                        help="suppress the per-trial tqdm progress bar (e.g. "
+                             "when piping output to a file). Default is to "
+                             "show one bar per fresh trial.")
     args = parser.parse_args()
 
     if args.algorithm == "both":
@@ -143,6 +147,7 @@ def main() -> int:
         base_seed=base_seed,
         progress=_make_progress(start),
         resume=resume,
+        show_progress=not args.no_progress,
     )
     total = time.perf_counter() - start
 

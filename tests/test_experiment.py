@@ -278,6 +278,67 @@ def test_resume_with_nothing_to_resume_runs_all(tmp_path: Path) -> None:
     assert [c["seed"] for c in ga_calls] == [0, 1, 2]
 
 
+# ---------------------------------------------------------------------------
+# show_progress wiring
+# ---------------------------------------------------------------------------
+
+
+def test_show_progress_wraps_generate_summary_and_ticks_bar(tmp_path: Path) -> None:
+    """When show_progress=True, the algorithm receives a wrapped
+    generate_summary that ticks a tqdm bar after each underlying call."""
+    call_log: list[str] = []
+
+    def fake_generate(template, code):  # noqa: ARG001
+        call_log.append(code)
+        return "ok"
+
+    def algo_that_invokes_generator(config, *, seed, output_dir, **kwargs):  # noqa: ARG001
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        gs = kwargs["generate_summary"]
+        # Make 4 calls so we can verify ticks.
+        for i in range(4):
+            gs(_mk_template(), f"code-{i}")
+        return _mk_template(role="done"), _mk_logs(0.7, n=2)
+
+    config = {
+        "ga": {"population_size": 2, "generations": 2},
+        "evaluation": {"eval_subset": 1},
+    }
+    run_experiment(
+        config,
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": algo_that_invokes_generator},
+        generate_summary=fake_generate,
+        show_progress=True,
+    )
+    # The wrapped generator forwards to fake_generate -> 4 calls observed.
+    assert call_log == ["code-0", "code-1", "code-2", "code-3"]
+
+
+def test_show_progress_off_does_not_wrap(tmp_path: Path) -> None:
+    received_kwargs: dict = {}
+
+    def algo_capturing(config, *, seed, output_dir, **kwargs):  # noqa: ARG001
+        received_kwargs.update(kwargs)
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        return _mk_template(), _mk_logs(0.5, n=1)
+
+    sentinel = object()
+    run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": algo_capturing},
+        generate_summary=sentinel,
+        show_progress=False,
+    )
+    # No wrapping -> the algorithm received our exact sentinel.
+    assert received_kwargs["generate_summary"] is sentinel
+
+
 def test_resume_ignores_partial_trial_dir(tmp_path: Path) -> None:
     """A trial dir with generations.jsonl but no best.json is NOT complete."""
     import json
