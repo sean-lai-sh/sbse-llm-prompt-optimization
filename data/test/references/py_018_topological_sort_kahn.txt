@@ -1,0 +1,1 @@
+Implements Kahn's algorithm to produce a topological ordering of a directed graph, returning None when the graph contains a cycle. Builds in-degree counts (including for nodes that appear only as successors) and repeatedly extracts zero-in-degree nodes from a queue seeded in sorted order for deterministic output. Runs in O(V + E) time.

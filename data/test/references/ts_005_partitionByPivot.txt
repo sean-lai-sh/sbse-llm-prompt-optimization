@@ -1,0 +1,1 @@
+Returns a new array consisting of the input partitioned into < pivot, === pivot, and > pivot segments concatenated in that order, in Dutch-national-flag layout but without an in-place rearrangement. Stable within each bucket, runs in O(n) time and O(n) extra space. The original array is not mutated.

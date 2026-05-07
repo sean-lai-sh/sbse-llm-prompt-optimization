@@ -1,0 +1,1 @@
+Computes the Levenshtein edit distance between two strings using a rolling-row dynamic-programming table over insertion, deletion, and substitution moves with uniform unit costs. Short-circuits the equal-string and empty-string cases up front. Runs in O(|a|*|b|) time and O(|b|) space.

@@ -1,0 +1,1 @@
+Decodes a run-length-encoded string of the form <count><char> repeated, where each numeric prefix indicates how many times the immediately following character should be repeated. Throws an Error on a missing count, a count without a trailing character, or any other malformed segment. Returns the fully expanded string.

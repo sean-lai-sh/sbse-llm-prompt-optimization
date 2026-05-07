@@ -1,0 +1,1 @@
+Returns the prefix-sum sequence of a list of floats: each output element i is the cumulative sum of nums[0..i] inclusive. The output length matches the input length and the running accumulator starts at 0.0. Iterates the input once in O(n) time.

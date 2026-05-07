@@ -1,0 +1,1 @@
+Builds the KMP failure table for pattern, where each entry table[i] is the length of the longest proper prefix of pattern[0..i] that is also a suffix. Used as a precomputation step for the Knuth-Morris-Pratt string-matching algorithm. Runs in O(|pattern|) time and O(|pattern|) space.

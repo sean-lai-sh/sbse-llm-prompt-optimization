@@ -1,0 +1,1 @@
+Returns the arithmetic negation of its numeric argument using JavaScript's unary minus. Inherits IEEE-754 behavior: negating 0 yields -0, and negating NaN yields NaN. The implementation is a single expression with no validation.

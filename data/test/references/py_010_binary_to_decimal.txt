@@ -1,0 +1,1 @@
+Parses a binary-digit string (optionally prefixed with '-') into the corresponding signed integer by left-shifting and OR-ing each bit. Raises ValueError on empty input or any character other than '0', '1', or a leading '-'. Returns the negation of the magnitude when the input begins with '-'.

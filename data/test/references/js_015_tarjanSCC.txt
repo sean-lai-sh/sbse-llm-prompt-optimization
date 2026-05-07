@@ -1,0 +1,1 @@
+Computes the strongly connected components of a directed graph using Tarjan's algorithm: a single DFS that tracks each node's discovery index and lowlink, popping a fully-collapsed component off an explicit stack when a node's lowlink equals its index. Returns an array of components in reverse topological order. The graph is given as an adjacency-list object keyed by node id.

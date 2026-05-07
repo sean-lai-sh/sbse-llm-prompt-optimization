@@ -1,0 +1,1 @@
+Returns the product of two integers, taking arguments a and b and returning a single integer. Relies on Python's arbitrary-precision integer multiplication, so it has no overflow concerns. The implementation is a direct expression with no validation or special-casing.

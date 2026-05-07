@@ -1,0 +1,1 @@
+Sums two Roman numerals by parsing each into an integer using the subtractive convention (a smaller symbol preceding a larger one is subtracted) and re-encoding the total via greedy descent through the standard symbol table. Inputs are accepted in any case via .upper(). The encoder produces canonical forms including the subtractive pairs IV, IX, XL, XC, CD, and CM.

@@ -1,0 +1,1 @@
+Computes the n-th Fibonacci number iteratively using two rolling variables, achieving O(n) time and O(1) space. Throws Error('n must be non-negative') for negative inputs and short-circuits to n itself for n < 2. Returns a JavaScript number, so values past F(78) lose precision due to the 53-bit mantissa.

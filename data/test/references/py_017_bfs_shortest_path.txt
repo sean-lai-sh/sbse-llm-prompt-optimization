@@ -1,0 +1,1 @@
+Returns the shortest path by edge count from src to dst in an unweighted adjacency-list graph, or None when dst is unreachable. Performs a standard breadth-first search and reconstructs the path through a parent-pointer dictionary on first reaching dst. The src == dst case returns a single-element path containing only src.

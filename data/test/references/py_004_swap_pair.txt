@@ -1,0 +1,1 @@
+Returns a 2-tuple containing the two integer arguments in swapped order. The function relies on Python's tuple packing and performs no mutation of any external state. Inputs and outputs are simple integers.

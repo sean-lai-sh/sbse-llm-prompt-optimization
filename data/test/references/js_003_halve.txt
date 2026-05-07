@@ -1,0 +1,1 @@
+Divides its numeric argument by two and returns the result. Inherits IEEE-754 division behavior, so very large finite inputs may produce Infinity and NaN propagates. The implementation is a single expression with no validation.

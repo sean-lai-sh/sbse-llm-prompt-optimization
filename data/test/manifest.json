@@ -1,0 +1,252 @@
+[
+  {
+    "filename": "py_001_multiply_pair.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_002_is_negative.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_003_double_value.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_004_swap_pair.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_005_triangle_area.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_006_circle_area.py",
+    "language": "python",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "py_007_kth_smallest.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_008_count_set_bits.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_009_decimal_to_binary.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_010_binary_to_decimal.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_011_running_total.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_012_find_missing_number.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_013_valid_parentheses_pairs.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_014_find_peak_element.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_015_levenshtein_iterative.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_016_roman_numeral_add.py",
+    "language": "python",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "py_017_bfs_shortest_path.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_018_topological_sort_kahn.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_019_interval_merge_with_priority.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "py_020_regex_match_dotstar.py",
+    "language": "python",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_001_negate.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_002_isPositive.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_003_halve.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_004_subtractArray.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_005_productArray.js",
+    "language": "javascript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "js_006_mapValues.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_007_filterDuplicates.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_008_partitionArray.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_009_binarySearchFirst.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_010_runLengthDecode.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_011_levenshteinDistance.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_012_singleNumberXor.js",
+    "language": "javascript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "js_013_intervalSchedulingMaximizer.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_014_wordLadderBfs.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "js_015_tarjanSCC.js",
+    "language": "javascript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_001_multiplyBy.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_002_floorDiv.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_003_mod.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_004_parityFlag.ts",
+    "language": "typescript",
+    "complexity_tier": "trivial"
+  },
+  {
+    "filename": "ts_005_partitionByPivot.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_006_coinSumWays.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_007_findFirstUnique.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_008_removeDuplicatesSortedArray.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_009_validBracketsTyped.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_010_levenshteinTyped.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_011_nthFibonacciIter.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_012_groupAnagramsTyped.ts",
+    "language": "typescript",
+    "complexity_tier": "medium"
+  },
+  {
+    "filename": "ts_013_kmpFailureTable.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_014_dijkstraTyped.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  },
+  {
+    "filename": "ts_015_editDistanceDP.ts",
+    "language": "typescript",
+    "complexity_tier": "complex"
+  }
+]

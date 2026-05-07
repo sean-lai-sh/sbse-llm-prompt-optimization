@@ -1,0 +1,1 @@
+Given an array of [start, end] intervals, returns a maximum-cardinality subset of mutually non-overlapping intervals using the classic earliest-end-time greedy algorithm. Sorts a copy of the input by end time, then walks the list adding any interval whose start is at least the previously chosen end. Empty input yields an empty result; the input array is not mutated.

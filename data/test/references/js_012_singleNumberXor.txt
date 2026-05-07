@@ -1,0 +1,1 @@
+Returns the lone unpaired integer in an array where every other value appears exactly twice, by XOR-ing every element together so paired values cancel to zero. Runs in O(n) time and O(1) space. Assumes the input precondition holds; multiple unique elements would produce an arbitrary XOR rather than an error.

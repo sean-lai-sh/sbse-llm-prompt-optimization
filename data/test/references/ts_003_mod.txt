@@ -1,0 +1,1 @@
+Computes a mathematical (always-non-negative) modulo of a by b using ((a % b) + b) % b. Throws Error('modulo by zero') when b is 0. The double-mod step ensures the result lies in [0, |b|) even when a is negative, unlike JavaScript's native % operator.

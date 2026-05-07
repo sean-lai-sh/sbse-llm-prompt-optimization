@@ -1,0 +1,1 @@
+Performs the LeetCode-style in-place deduplication of a sorted numeric array and returns the new length. Uses a two-pointer write/read scan so each unique value is kept exactly once, then truncates the array via arr.length = write so callers can read just the prefix. Mutates its input.
