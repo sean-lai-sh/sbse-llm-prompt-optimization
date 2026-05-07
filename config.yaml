@@ -13,12 +13,13 @@ target_model:
   retry_initial_backoff_seconds: 1.0
 
 ga:
-  population_size: 20
-  generations: 30
+  population_size: 12      # was 20 — convergence on this small search space doesn't need 20
+  generations: 15          # was 30 — this space converges in ~10-15 anyway
   elite_count: 2
   crossover_rate: 0.7
   mutation_rate: 0.3
   tournament_k: 3
+  workers: 16              # parallel fitness evals per generation; bump higher only if OpenRouter doesn't 429
 
 fitness:
   max_prompt_tokens: 200
@@ -31,7 +32,7 @@ fitness:
                          # scripts/calibrate_cosine_baseline.py.
 
 evaluation:
-  eval_subset: null   # null = use all 500 files; set to an int for fast inner-loop evals
+  eval_subset: 10     # 10 functions per fitness call; set to null to use all 500 (final eval only)
 
 experiment:
   trials: 10                              # independent runs per algorithm; >=10 keeps Wilcoxon credible
