@@ -25,7 +25,7 @@ fitness:
   max_prompt_tokens: 200
   lambda_len: 0.1
   lambda_fmt: 0.2
-  alpha: 0.5  # blend weight: alpha * ROUGE-L + (1 - alpha) * calibrated_cosine
+  alpha: 0.3  # blend weight: alpha * ROUGE-L + (1 - alpha) * calibrated_cosine. Lowered from 0.5 because cosine catches semantically-equivalent paraphrases that ROUGE-L would punish — semantic match is a superset of the lexical match we actually care about, so weight it higher. ROUGE-L stays at 0.3 to anchor outputs to Opus's specific phrasing.
   cosine_baseline: 0.45  # raw cosine on random unmatched pairs; rescaled
                          # via (raw - baseline) / (1 - baseline) so the
                          # blend is comparable to ROUGE-L. Re-derive with
