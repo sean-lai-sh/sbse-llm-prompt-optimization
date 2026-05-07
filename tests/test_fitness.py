@@ -183,6 +183,44 @@ def test_short_prompt_has_no_length_penalty(benchmark) -> None:
     assert result["length_penalty"] == 0.0
 
 
+def test_length_penalty_quadratic_growth_past_floor() -> None:
+    """Default exponent=2.0 -> 25% over yields ~0.0625, doubled length yields 1.0."""
+    from src.fitness import _length_penalty
+    assert _length_penalty(200, 200, exponent=2.0) == 0.0          # at floor
+    assert _length_penalty(150, 200, exponent=2.0) == 0.0          # below floor
+    assert _length_penalty(250, 200, exponent=2.0) == pytest.approx(0.0625)  # 25% over
+    assert _length_penalty(400, 200, exponent=2.0) == pytest.approx(1.0)     # 2x floor
+    assert _length_penalty(600, 200, exponent=2.0) == pytest.approx(4.0)     # 3x floor
+
+
+def test_length_penalty_linear_when_exponent_is_one() -> None:
+    """exponent=1.0 recovers the original linear penalty for backwards comparison."""
+    from src.fitness import _length_penalty
+    assert _length_penalty(250, 200, exponent=1.0) == pytest.approx(0.25)
+    assert _length_penalty(400, 200, exponent=1.0) == pytest.approx(1.0)
+    assert _length_penalty(600, 200, exponent=1.0) == pytest.approx(2.0)
+
+
+def test_length_penalty_exponent_is_read_from_config(benchmark) -> None:
+    """A higher exponent makes the same overage hurt more in the blended score."""
+    fns, refs = benchmark
+    long_role = "word " * 500
+    template = PromptTemplate(role=long_role, task="t", guard="g", format="f")
+
+    with patch.object(fitness_mod, "cosine_similarity_batch", return_value=[0.5] * len(fns)):
+        soft = score_prompt(
+            template, fns, refs,
+            generate_summary=_make_gen(["s"] * len(fns)),
+            config=FitnessConfig(max_prompt_tokens=50, length_penalty_exponent=1.0),
+        )
+        harsh = score_prompt(
+            template, fns, refs,
+            generate_summary=_make_gen(["s"] * len(fns)),
+            config=FitnessConfig(max_prompt_tokens=50, length_penalty_exponent=3.0),
+        )
+    assert harsh["length_penalty"] > soft["length_penalty"]
+
+
 # ---------------------------------------------------------------------------
 # Calibration is wired through correctly
 # ---------------------------------------------------------------------------

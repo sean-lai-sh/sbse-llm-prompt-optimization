@@ -42,6 +42,7 @@ class FitnessConfig:
     lambda_len: float = 0.1
     lambda_fmt: float = 0.2
     max_prompt_tokens: int = 200
+    length_penalty_exponent: float = 2.0
 
     @classmethod
     def from_yaml(cls, path: Path = DEFAULT_CONFIG_PATH) -> "FitnessConfig":
@@ -90,9 +91,28 @@ def _format_violation_penalty(generated: str, reference: str) -> float:
     return 0.0
 
 
-def _length_penalty(prompt_token_count: int, max_tokens: int) -> float:
+def _length_penalty(
+    prompt_token_count: int,
+    max_tokens: int,
+    exponent: float = 2.0,
+) -> float:
+    """Length penalty with a hard floor at ``max_tokens`` and a configurable
+    growth curve past it.
+
+    * Below ``max_tokens``: penalty is 0 (so concise prompts are never
+      penalised). This is the "floor" the brief calls for.
+    * Past ``max_tokens``: penalty grows as ``(excess / max_tokens) ** exponent``.
+      With the default exponent of 2.0, the curve is gentle right after the
+      floor (e.g. 25% over -> 0.0625 penalty) and steep far above it (e.g.
+      doubled length -> 1.0 penalty, tripled -> 4.0). exponent=1.0 recovers
+      the old linear behaviour; exponent>2 tightens the curve further.
+    """
+    if max_tokens <= 0:
+        return 0.0
     excess = max(0, prompt_token_count - max_tokens)
-    return excess / max_tokens if max_tokens > 0 else 0.0
+    if excess == 0:
+        return 0.0
+    return (excess / max_tokens) ** exponent
 
 
 def score_prompt(
@@ -180,7 +200,11 @@ def score_prompt(
     fmt_pen_mean = sum(format_penalties) / n
 
     prompt_tokens = _approx_token_count(template.render_instructions())
-    len_pen = _length_penalty(prompt_tokens, config.max_prompt_tokens)
+    len_pen = _length_penalty(
+        prompt_tokens,
+        config.max_prompt_tokens,
+        exponent=config.length_penalty_exponent,
+    )
 
     blended = (
         config.alpha * rouge_mean

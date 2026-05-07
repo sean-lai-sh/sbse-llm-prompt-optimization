@@ -57,33 +57,44 @@ def _default_benchmark(
     """Pair every function file with its same-stem reference file.
 
     Fails loud if any function lacks a matching reference (or vice-versa) so
-    a missing data file can't silently shrink the benchmark.
+    a missing data file can't silently shrink the benchmark. Only source files
+    with ``.py``, ``.js``, or ``.ts`` extensions are considered benchmark
+    functions; metadata files (e.g. ``manifest.json``) are ignored.
     """
-    fn_paths = sorted(functions_dir.glob("*"))
-    fn_paths = [p for p in fn_paths if p.is_file()]
-    ref_by_stem = {p.stem: p for p in references_dir.glob("*") if p.is_file()}
+    supported_ext = {".py", ".js", ".ts"}
+    fn_paths = sorted(
+        p for p in functions_dir.iterdir()
+        if p.is_file() and p.suffix in supported_ext
+    )
+    ref_by_stem = {
+        p.stem: p for p in references_dir.iterdir()
+        if p.is_file() and not p.name.startswith(".")
+    }
 
-    fns: list[Path] = []
-    refs: list[Path] = []
-    missing: list[str] = []
-    for fn in fn_paths:
-        ref = ref_by_stem.get(fn.stem)
-        if ref is None:
-            missing.append(fn.name)
-            continue
-        fns.append(fn)
-        refs.append(ref)
-
-    if missing:
+    fn_stems = {p.stem for p in fn_paths}
+    missing = sorted(fn_stems - ref_by_stem.keys())
+    orphan_refs = sorted(ref_by_stem.keys() - fn_stems)
+    if missing or orphan_refs:
+        details = []
+        if missing:
+            details.append(
+                f"{len(missing)} function(s) without a matching reference: "
+                f"{missing[:5]}{'...' if len(missing) > 5 else ''}"
+            )
+        if orphan_refs:
+            details.append(
+                f"{len(orphan_refs)} reference(s) without functions: "
+                f"{orphan_refs[:5]}{'...' if len(orphan_refs) > 5 else ''}"
+            )
         raise ValueError(
-            f"benchmark pairing failed: {len(missing)} function(s) without a "
-            f"matching reference: {missing[:5]}{'...' if len(missing) > 5 else ''}"
+            "benchmark pairing failed: " + " | ".join(details)
         )
-    if not fns:
+    if not fn_paths:
         raise ValueError(
             f"no benchmark pairs found under {functions_dir} / {references_dir}"
         )
-    return fns, refs
+    refs = [ref_by_stem[fn.stem] for fn in fn_paths]
+    return fn_paths, refs
 
 
 def _load_config(config: dict | None) -> dict:
@@ -106,14 +117,15 @@ def run_rs(
     output_dir: Optional[Path] = None,
     seed: int = 0,
     score_fn: Optional[Callable] = None,
-    workers: int = 8,
+    workers: Optional[int] = None,
 ) -> tuple[PromptTemplate, list[GenerationLog]]:
     """Run Random Search with the same total budget as the GA.
 
     Args:
         config: parsed config dict. When None, loads ``config.yaml`` from the
             repo root. Must contain ``ga.population_size`` and
-            ``ga.generations``; ``evaluation.eval_subset`` is honored if set.
+            ``ga.generations``; ``evaluation.eval_subset`` is honored if set;
+            ``ga.workers`` (if set) is honored for fairness with run_ga.
         generate_summary: callable forwarded to the fitness function;
             defaults to the OpenRouter-backed implementation in ``src.target_model``.
         functions: ordered function paths. Defaults to the full benchmark.
@@ -123,7 +135,9 @@ def run_rs(
         seed: RNG seed for template sampling. Same seed -> identical run.
         score_fn: fitness callable matching ``score_prompt``'s signature.
             Defaults to ``score_prompt``; injected for tests.
-        workers: thread pool size for parallel fitness evaluation.
+        workers: thread pool size. Defaults to ``ga.workers`` from config
+            (so RS gets the same parallelism as GA), falling back to 8 if
+            unset.
 
     Returns:
         ``(best_template, logs)`` where ``logs`` has length ``G``.
@@ -131,6 +145,8 @@ def run_rs(
     cfg = _load_config(config)
 
     ga_cfg = cfg.get("ga") or {}
+    if workers is None:
+        workers = int(ga_cfg.get("workers", 8))
     try:
         population_size = int(ga_cfg["population_size"])
         generations = int(ga_cfg["generations"])

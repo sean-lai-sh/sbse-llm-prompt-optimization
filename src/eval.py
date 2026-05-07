@@ -42,16 +42,29 @@ _MODEL_NAME = "BAAI/bge-small-en-v1.5"
 # Lazily-instantiated singleton. We deliberately do NOT load at import time
 # because pytest collection should stay fast; the first call to an embedding
 # function pays the load cost, every subsequent call reuses the same weights.
+#
+# The lock prevents a race when the GA's ThreadPoolExecutor calls
+# cosine_similarity_batch() from many workers simultaneously on the very
+# first generation: without it, multiple threads pass the `is None` check
+# and start instantiating SentenceTransformer at the same time, which
+# triggers PyTorch's "Cannot copy out of meta tensor" error during the
+# concurrent module-to-device move. Double-checked locking ensures exactly
+# one initialization; subsequent calls hit the fast path with no lock.
+import threading  # noqa: E402
+
 _model = None
+_model_lock = threading.Lock()
 
 
 def _get_model():
     """Return the cached sentence-transformer model, loading it on first use."""
     global _model
     if _model is None:
-        from sentence_transformers import SentenceTransformer  # noqa: PLC0415
+        with _model_lock:
+            if _model is None:  # re-check inside the lock
+                from sentence_transformers import SentenceTransformer  # noqa: PLC0415
 
-        _model = SentenceTransformer(_MODEL_NAME)
+                _model = SentenceTransformer(_MODEL_NAME)
     return _model
 
 

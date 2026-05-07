@@ -322,6 +322,25 @@ def test_default_benchmark_raises_on_unpaired(tmp_path: Path) -> None:
         _default_benchmark(fn_dir, ref_dir)
 
 
+def test_default_benchmark_ignores_non_benchmark_files(tmp_path: Path) -> None:
+    fn_dir = tmp_path / "functions"
+    ref_dir = tmp_path / "references"
+    fn_dir.mkdir()
+    ref_dir.mkdir()
+    (fn_dir / "a.js").write_text("function a(){}")
+    (fn_dir / "b.py").write_text("def b(): pass")
+    (fn_dir / "c.ts").write_text("function c(): void {}")
+    (fn_dir / "manifest.json").write_text("{}")
+    (ref_dir / "a.txt").write_text("a")
+    (ref_dir / "b.txt").write_text("b")
+    (ref_dir / "c.txt").write_text("c")
+    (ref_dir / ".gitkeep").write_text("")
+
+    fns, refs = _default_benchmark(fn_dir, ref_dir)
+    assert [p.name for p in fns] == ["a.js", "b.py", "c.ts"]
+    assert [p.name for p in refs] == ["a.txt", "b.txt", "c.txt"]
+
+
 def test_default_benchmark_pairs_by_stem(tmp_path: Path) -> None:
     fn_dir = tmp_path / "functions"
     ref_dir = tmp_path / "references"
@@ -334,6 +353,18 @@ def test_default_benchmark_pairs_by_stem(tmp_path: Path) -> None:
     fns, refs = _default_benchmark(fn_dir, ref_dir)
     assert [p.stem for p in fns] == [p.stem for p in refs]
     assert len(fns) == 2
+
+
+def test_default_benchmark_raises_on_orphan_reference(tmp_path: Path) -> None:
+    fn_dir = tmp_path / "functions"
+    ref_dir = tmp_path / "references"
+    fn_dir.mkdir()
+    ref_dir.mkdir()
+    (fn_dir / "a.js").write_text("function a(){}")
+    (ref_dir / "a.txt").write_text("a")
+    (ref_dir / "b.txt").write_text("b")
+    with pytest.raises(ValueError, match="without functions"):
+        _default_benchmark(fn_dir, ref_dir)
 
 
 def test_default_benchmark_raises_on_empty(tmp_path: Path) -> None:
@@ -370,3 +401,67 @@ def test_run_rs_rejects_non_positive_budget(benchmark, tmp_path: Path) -> None:
             functions=fns, references=refs,
             output_dir=tmp_path / "out", score_fn=mock,
         )
+
+
+def test_run_rs_reads_workers_from_ga_config(benchmark, tmp_path: Path) -> None:
+    """workers defaults to ga.workers in config so RS matches GA's parallelism."""
+    from unittest.mock import patch
+    from src import random_search as rs_mod
+
+    fns, refs = benchmark
+    mock, _ = _make_mock_score_fn()
+
+    captured: dict = {}
+
+    class _SpyExecutor:
+        def __init__(self, *args, **kwargs):
+            captured["max_workers"] = kwargs.get("max_workers")
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def map(self, fn, items):
+            return [fn(x) for x in items]
+
+    with patch.object(rs_mod, "ThreadPoolExecutor", _SpyExecutor):
+        run_rs(
+            {"ga": {"population_size": 2, "generations": 1, "workers": 13}},
+            functions=fns, references=refs,
+            output_dir=tmp_path / "out", score_fn=mock,
+        )
+    assert captured["max_workers"] == 13
+
+
+def test_run_rs_workers_kwarg_overrides_config(benchmark, tmp_path: Path) -> None:
+    """Explicit workers= kwarg wins over config ga.workers."""
+    from unittest.mock import patch
+    from src import random_search as rs_mod
+
+    fns, refs = benchmark
+    mock, _ = _make_mock_score_fn()
+    captured: dict = {}
+
+    class _SpyExecutor:
+        def __init__(self, *args, **kwargs):
+            captured["max_workers"] = kwargs.get("max_workers")
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def map(self, fn, items):
+            return [fn(x) for x in items]
+
+    with patch.object(rs_mod, "ThreadPoolExecutor", _SpyExecutor):
+        run_rs(
+            {"ga": {"population_size": 2, "generations": 1, "workers": 13}},
+            functions=fns, references=refs,
+            output_dir=tmp_path / "out", score_fn=mock,
+            workers=5,  # should override the config value
+        )
+    assert captured["max_workers"] == 5
