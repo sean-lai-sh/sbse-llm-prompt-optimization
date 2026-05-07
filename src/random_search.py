@@ -92,7 +92,7 @@ def _default_benchmark(
             f"no benchmark pairs found under {functions_dir} / {references_dir}"
         )
     refs = [ref_by_stem[fn.stem] for fn in fn_paths]
-    return list(fn_paths), refs
+    return fn_paths, refs
 
 
 def _load_config(config: dict | None) -> dict:
