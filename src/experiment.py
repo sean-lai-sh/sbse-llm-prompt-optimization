@@ -172,7 +172,7 @@ def run_experiment(
                 try:
                     best_template, logs = _load_completed_trial(run_dir)
                     resumed = True
-                except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
+                except (OSError, ValueError, json.JSONDecodeError):
                     # Partial/corrupt prior output: rerun this trial fresh.
                     ts = _utc_timestamp()
                     run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
