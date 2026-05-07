@@ -32,6 +32,19 @@ def _load_config(path: Path) -> dict:
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
+def _latest_experiment_dir(results_parent: Path) -> Path | None:
+    """Return the most recently modified ``results/experiment_*/`` dir, or None."""
+    if not results_parent.is_dir():
+        return None
+    candidates = [
+        d for d in results_parent.iterdir()
+        if d.is_dir() and d.name.startswith("experiment_")
+    ]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda d: d.stat().st_mtime)
+
+
 def _make_progress(start: float):
     """Return a callback that prints a one-line update per completed trial."""
     last = {"count": 0}
@@ -66,7 +79,12 @@ def main() -> int:
                         help="path to config.yaml")
     parser.add_argument("--output-root", type=Path, default=None,
                         help="directory to drop trial subdirs into; "
-                             "default results/experiment_<UTC_ts>/")
+                             "default results/experiment_<UTC_ts>/. Pass an "
+                             "existing dir (or --latest) to resume that run.")
+    parser.add_argument("--latest", action="store_true",
+                        help="resume the most recent results/experiment_*/ "
+                             "directory instead of starting a fresh one. "
+                             "Mutually exclusive with --output-root.")
     parser.add_argument("--base-seed", type=int, default=None,
                         help="trial i uses seed = base_seed + i (default: "
                              "experiment.base_seed in config.yaml, else 0)")
@@ -90,7 +108,18 @@ def main() -> int:
     trials = args.trials if args.trials is not None else int(exp_cfg.get("trials", 10))
     base_seed = args.base_seed if args.base_seed is not None else int(exp_cfg.get("base_seed", 0))
 
+    if args.latest and args.output_root is not None:
+        parser.error("--latest and --output-root are mutually exclusive")
+
     output_root = args.output_root
+    if args.latest:
+        latest = _latest_experiment_dir(REPO_ROOT / "results")
+        if latest is None:
+            parser.error(
+                "--latest given but no results/experiment_*/ directory exists"
+            )
+        output_root = latest
+        print(f"--latest resolved to: {output_root}", flush=True)
     if output_root is None:
         ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         output_root = REPO_ROOT / "results" / f"experiment_{ts}"
@@ -98,7 +127,10 @@ def main() -> int:
     resume = not args.no_resume
     print(
         f"Running {trials} trial(s) of {algos} -> {output_root}\n"
-        f"Config: {args.config}  base_seed={base_seed}  resume={resume}",
+        f"Config: {args.config}  base_seed={base_seed}  resume={resume}\n"
+        f"To resume after a crash:\n"
+        f"  python scripts/run_experiment.py --latest\n"
+        f"  (or explicitly: --output-root {output_root})",
         flush=True,
     )
 
