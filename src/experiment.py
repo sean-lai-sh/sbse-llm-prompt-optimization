@@ -233,7 +233,9 @@ def run_experiment(
             desc=label,
             unit="call",
             leave=True,
-            ncols=100,
+            dynamic_ncols=True,   # auto-fit to current terminal width
+            mininterval=0.25,     # throttle redraws so updates feel smooth
+            smoothing=0.1,        # weighted ETA averaging
         )
         try:
             user_gen = algorithm_kwargs.get("generate_summary")
