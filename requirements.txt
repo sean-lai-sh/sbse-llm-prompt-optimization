@@ -1,10 +1,23 @@
-anthropic>=0.40.0
-matplotlib>=3.7.0
-openai>=1.30.0
-python-dotenv>=1.0.0
-pyyaml>=6.0
-rouge-score>=0.1.2
-scipy>=1.10.0
-sentence-transformers>=2.2.0
-tqdm>=4.65.0
+# Runtime + dev dependencies for sbse-llm-prompt-optimization.
+# Install with:  python -m pip install -r requirements.txt
+# Tested on Python 3.9+
+
+# --- LLM providers ----------------------------------------------------------
+openai>=1.30.0           # used by src/target_model.py (OpenRouter) and src/improver.py (NIM)
+anthropic>=0.40.0        # used by scripts/generate_references.py (Claude Opus reference summaries)
+python-dotenv>=1.0.0     # loads OPENROUTER_API_KEY / NVIDIA_API_KEY / ANTHROPIC_API_KEY from .env
+
+# --- Fitness evaluation -----------------------------------------------------
+rouge-score>=0.1.2       # ROUGE-L for the lexical half of the blended fitness
+sentence-transformers>=2.2.0  # bge-small embedder for the semantic half
+numpy>=1.24.0            # cosine similarity math in src/eval.py and src/stats.py
+
+# --- Experiment orchestration & analysis -----------------------------------
+pyyaml>=6.0              # parses config.yaml everywhere
+scipy>=1.10.0            # Wilcoxon rank-sum in src/stats.py
+matplotlib>=3.7.0        # convergence plot in scripts/plot_convergence.py
+tqdm>=4.65.0             # per-trial progress bar in scripts/run_experiment.py
+
+# --- Tests ------------------------------------------------------------------
 pytest>=8.0
+httpx>=0.27.0            # used in tests/test_target_model.py to build openai SDK error stubs
