@@ -51,7 +51,7 @@ def wilcoxon_ranksum(a: Sequence[float], b: Sequence[float]) -> tuple[float, flo
     Returns ``(statistic, p_value)``. Wraps ``scipy.stats.ranksums`` so callers
     do not import scipy directly.
     """
-    if len(a) < 1 or len(b) < 1:
+    if len(a) == 0 or len(b) == 0:
         raise ValueError("both samples must be non-empty")
     result = ranksums(list(a), list(b))
     return float(result.statistic), float(result.pvalue)
@@ -64,7 +64,7 @@ def cliffs_delta(a: Sequence[float], b: Sequence[float]) -> tuple[float, str]:
     using the Romano et al. (2006) thresholds (negligible / small / medium /
     large) reported by the SBSE community.
     """
-    if not a or not b:
+    if len(a) == 0 or len(b) == 0:
         raise ValueError("both samples must be non-empty")
     n = len(a) * len(b)
     greater = 0
@@ -95,7 +95,7 @@ def compare_distributions(
     metric: str = "blended",
 ) -> ComparisonResult:
     """Run Wilcoxon + Cliff's delta and bundle the descriptive stats."""
-    if not a or not b:
+    if len(a) == 0 or len(b) == 0:
         raise ValueError(f"{metric}: both samples must be non-empty")
     statistic, p = wilcoxon_ranksum(a, b)
     delta, label = cliffs_delta(a, b)

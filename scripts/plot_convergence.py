@@ -41,7 +41,17 @@ ALGO_COLORS = {"ga": "tab:blue", "rs": "tab:orange"}
 
 
 def _stack_metric(trial_dirs: list[Path], field: str) -> np.ndarray:
-    """Return an (n_trials, n_generations) array, padded to the shortest run."""
+    """Return an ``(n_trials, n_generations)`` array of cumulative best per
+    trial, truncated to the shortest run.
+
+    Cumulative max along the generation axis matters for Random Search: its
+    per-checkpoint ``best_*`` values describe the best in *that bucket*, not
+    the best seen so far. Without `np.maximum.accumulate`, an RS trial that
+    finds its winner mid-run would visually regress in later checkpoints
+    and the figure would understate the baseline. GA already preserves the
+    best via elitism, so the cumulative max is a no-op for it -- safe to
+    apply uniformly.
+    """
     series = []
     for d in trial_dirs:
         logs = load_generation_logs(d)
@@ -49,7 +59,8 @@ def _stack_metric(trial_dirs: list[Path], field: str) -> np.ndarray:
     if not series:
         return np.empty((0, 0))
     min_len = min(len(s) for s in series)
-    return np.array([s[:min_len] for s in series], dtype=float)
+    raw = np.array([s[:min_len] for s in series], dtype=float)
+    return np.maximum.accumulate(raw, axis=1)
 
 
 def main() -> int:

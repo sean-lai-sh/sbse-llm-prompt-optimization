@@ -39,12 +39,16 @@ def _print_table(summary: dict) -> None:
           f"{'cliffs d':>10}  "
           f"{'effect':>12}")
     print("-" * 103)
+    target_mean_key = f"{target}_mean"
+    target_std_key = f"{target}_std"
+    baseline_mean_key = f"{baseline}_mean"
+    baseline_std_key = f"{baseline}_std"
     for metric in PER_TRIAL_METRICS:
         c = summary["comparisons"][metric]
         print(
             f"{metric:<22} "
-            f"{c['mean_a']:>11.4f} ({c['std_a']:.4f})  "
-            f"{c['mean_b']:>11.4f} ({c['std_b']:.4f})  "
+            f"{c[target_mean_key]:>11.4f} ({c[target_std_key]:.4f})  "
+            f"{c[baseline_mean_key]:>11.4f} ({c[baseline_std_key]:.4f})  "
             f"{c['p_value']:>10.4f}  "
             f"{c['cliffs_delta']:>+10.4f}  "
             f"{c['delta_label']:>12}"

@@ -154,10 +154,27 @@ def test_analyze_results_root_full_pipeline(tmp_path: Path) -> None:
     assert "blended" in result["comparisons"]
 
     blended = result["comparisons"]["blended"]
-    assert blended["mean_a"] > blended["mean_b"]
+    # Schema uses algorithm-named keys (matches issue #11 spec).
+    assert blended["ga_mean"] > blended["rs_mean"]
+    assert blended["n_ga"] == 5
+    assert blended["n_rs"] == 5
+    assert "ga_std" in blended and "rs_std" in blended
     assert blended["cliffs_delta"] == pytest.approx(1.0)
     assert blended["delta_label"] == "large"
     assert blended["p_value"] < 0.05  # n=5 vs n=5 with full domination
+
+
+def test_analyze_results_root_schema_uses_custom_algorithm_names(tmp_path: Path) -> None:
+    """Field-name renaming honors the actual --target / --baseline names."""
+    for i in range(3):
+        _write_trial(tmp_path, f"foo_trial_{i:03d}_x", [_mk_log(0, 0.5)])
+        _write_trial(tmp_path, f"bar_trial_{i:03d}_x", [_mk_log(0, 0.4)])
+
+    result = analyze_results_root(tmp_path, target_algorithm="foo", baseline_algorithm="bar")
+    blended = result["comparisons"]["blended"]
+    assert "foo_mean" in blended and "bar_mean" in blended
+    assert "foo_std" in blended and "bar_std" in blended
+    assert "n_foo" in blended and "n_bar" in blended
 
 
 def test_analyze_results_root_missing_algorithm_raises(tmp_path: Path) -> None:

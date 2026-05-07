@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import asdict
 from pathlib import Path
 from typing import Iterable
 
@@ -101,6 +100,31 @@ def summarize_trials(
     return columns
 
 
+def _comparison_with_algo_names(
+    comparison,
+    target_algorithm: str,
+    baseline_algorithm: str,
+) -> dict:
+    """Rename generic ``mean_a/mean_b/...`` keys to ``<algo>_mean/...`` so the
+    output matches issue #11's ``statistical_summary.json`` schema and is
+    readable without knowing which side was 'a' vs 'b'.
+    """
+    raw = comparison.to_dict()
+    return {
+        "metric": raw["metric"],
+        f"n_{target_algorithm}": raw["n_a"],
+        f"n_{baseline_algorithm}": raw["n_b"],
+        f"{target_algorithm}_mean": raw["mean_a"],
+        f"{baseline_algorithm}_mean": raw["mean_b"],
+        f"{target_algorithm}_std": raw["std_a"],
+        f"{baseline_algorithm}_std": raw["std_b"],
+        "statistic": raw["statistic"],
+        "p_value": raw["p_value"],
+        "cliffs_delta": raw["cliffs_delta"],
+        "delta_label": raw["delta_label"],
+    }
+
+
 def analyze_results_root(
     results_root: Path,
     *,
@@ -130,7 +154,9 @@ def analyze_results_root(
             baseline_cols[metric],
             metric=metric,
         )
-        per_metric[metric] = comparison.to_dict()
+        per_metric[metric] = _comparison_with_algo_names(
+            comparison, target_algorithm, baseline_algorithm
+        )
 
     return {
         "target_algorithm": target_algorithm,

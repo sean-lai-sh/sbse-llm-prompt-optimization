@@ -52,8 +52,14 @@ def _make_progress(start: float):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--trials", type=int, default=10,
-                        help="independent runs per algorithm (default: 10)")
+    # Sentinels: when an arg is left at None on the CLI, fall back to the
+    # corresponding `experiment.*` value in config.yaml (then to the
+    # built-in defaults). This keeps `python scripts/run_experiment.py`
+    # honoring config tweaks without forcing every flag to be re-typed.
+    parser.add_argument("--trials", type=int, default=None,
+                        help="independent runs per algorithm "
+                             "(default: experiment.trials in config.yaml, "
+                             "else 10)")
     parser.add_argument("--algorithm", choices=["ga", "rs", "both"], default="both",
                         help="which algorithms to run (default: both)")
     parser.add_argument("--config", type=Path, default=REPO_ROOT / "config.yaml",
@@ -61,8 +67,9 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=None,
                         help="directory to drop trial subdirs into; "
                              "default results/experiment_<UTC_ts>/")
-    parser.add_argument("--base-seed", type=int, default=0,
-                        help="trial i uses seed = base_seed + i (default 0)")
+    parser.add_argument("--base-seed", type=int, default=None,
+                        help="trial i uses seed = base_seed + i (default: "
+                             "experiment.base_seed in config.yaml, else 0)")
     parser.add_argument("--skip-analysis", action="store_true",
                         help="don't auto-run scripts/analyze_results.py at the end")
     parser.add_argument("--no-resume", action="store_true",
@@ -78,6 +85,10 @@ def main() -> int:
         algos = [args.algorithm]
 
     config = _load_config(args.config)
+    exp_cfg = config.get("experiment") or {}
+
+    trials = args.trials if args.trials is not None else int(exp_cfg.get("trials", 10))
+    base_seed = args.base_seed if args.base_seed is not None else int(exp_cfg.get("base_seed", 0))
 
     output_root = args.output_root
     if output_root is None:
@@ -86,18 +97,18 @@ def main() -> int:
 
     resume = not args.no_resume
     print(
-        f"Running {args.trials} trial(s) of {algos} -> {output_root}\n"
-        f"Config: {args.config}  base_seed={args.base_seed}  resume={resume}",
+        f"Running {trials} trial(s) of {algos} -> {output_root}\n"
+        f"Config: {args.config}  base_seed={base_seed}  resume={resume}",
         flush=True,
     )
 
     start = time.perf_counter()
     results = run_experiment(
         config,
-        trials=args.trials,
+        trials=trials,
         algorithms=algos,
         output_root=output_root,
-        base_seed=args.base_seed,
+        base_seed=base_seed,
         progress=_make_progress(start),
         resume=resume,
     )
@@ -106,9 +117,9 @@ def main() -> int:
     # Write a manifest so the analysis script (and anyone reading the dir) has
     # provenance.
     manifest = {
-        "trials": args.trials,
+        "trials": trials,
         "algorithms": algos,
-        "base_seed": args.base_seed,
+        "base_seed": base_seed,
         "wall_seconds": total,
         "trial_results": [
             {
@@ -117,11 +128,14 @@ def main() -> int:
                 "seed": r.seed,
                 "output_dir": str(r.output_dir.relative_to(output_root)),
                 "best_blended": r.best_blended,
+                "resumed": r.resumed,
             }
             for r in results
         ],
     }
-    (output_root / "manifest.json").write_text(json.dumps(manifest, indent=2))
+    (output_root / "manifest.json").write_text(
+        json.dumps(manifest, indent=2), encoding="utf-8"
+    )
     print(f"\nDone. {len(results)} trials in {total:.1f}s. Manifest: {output_root}/manifest.json",
           flush=True)
 
