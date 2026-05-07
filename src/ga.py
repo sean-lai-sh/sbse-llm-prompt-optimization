@@ -219,7 +219,7 @@ def run_ga(
             :func:`src.fitness.score_prompt`. Tests inject a deterministic
             mock; production uses the real blended fitness.
         generate_summary: forwarded to ``score_fn`` so callers can inject a
-            mock target model. Default ``None`` resolves to the NIM client
+            mock target model. Default ``None`` resolves to the OpenRouter client
             inside the fitness function.
         functions / references: paired benchmark paths. Default to the full
             500-file benchmark via :func:`_default_benchmark`.

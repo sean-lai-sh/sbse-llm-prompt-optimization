@@ -115,7 +115,7 @@ def run_rs(
             repo root. Must contain ``ga.population_size`` and
             ``ga.generations``; ``evaluation.eval_subset`` is honored if set.
         generate_summary: callable forwarded to the fitness function;
-            defaults to the NIM-backed implementation in ``src.target_model``.
+            defaults to the OpenRouter-backed implementation in ``src.target_model``.
         functions: ordered function paths. Defaults to the full benchmark.
         references: ordered reference paths paired by stem with ``functions``.
         output_dir: directory for ``generations.jsonl`` and ``best.json``.
