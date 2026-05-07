@@ -268,8 +268,9 @@ def run_experiment(
                 try:
                     best_template, logs = _load_completed_trial(run_dir)
                     resumed = True
-                except (OSError, ValueError, json.JSONDecodeError):
-                    # Partial/corrupt prior output: rerun this trial fresh.
+                except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                    # Partial/corrupt prior output (truncated file, malformed
+                    # JSON, schema-invalid row like {} or []): rerun fresh.
                     ts = _utc_timestamp()
                     run_dir = output_root / f"{algo_name}_trial_{i:03d}_{ts}"
                     best_template, logs = _run_fresh_trial(

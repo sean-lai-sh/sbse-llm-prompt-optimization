@@ -401,3 +401,67 @@ def test_run_rs_rejects_non_positive_budget(benchmark, tmp_path: Path) -> None:
             functions=fns, references=refs,
             output_dir=tmp_path / "out", score_fn=mock,
         )
+
+
+def test_run_rs_reads_workers_from_ga_config(benchmark, tmp_path: Path) -> None:
+    """workers defaults to ga.workers in config so RS matches GA's parallelism."""
+    from unittest.mock import patch
+    from src import random_search as rs_mod
+
+    fns, refs = benchmark
+    mock, _ = _make_mock_score_fn()
+
+    captured: dict = {}
+
+    class _SpyExecutor:
+        def __init__(self, *args, **kwargs):
+            captured["max_workers"] = kwargs.get("max_workers")
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def map(self, fn, items):
+            return [fn(x) for x in items]
+
+    with patch.object(rs_mod, "ThreadPoolExecutor", _SpyExecutor):
+        run_rs(
+            {"ga": {"population_size": 2, "generations": 1, "workers": 13}},
+            functions=fns, references=refs,
+            output_dir=tmp_path / "out", score_fn=mock,
+        )
+    assert captured["max_workers"] == 13
+
+
+def test_run_rs_workers_kwarg_overrides_config(benchmark, tmp_path: Path) -> None:
+    """Explicit workers= kwarg wins over config ga.workers."""
+    from unittest.mock import patch
+    from src import random_search as rs_mod
+
+    fns, refs = benchmark
+    mock, _ = _make_mock_score_fn()
+    captured: dict = {}
+
+    class _SpyExecutor:
+        def __init__(self, *args, **kwargs):
+            captured["max_workers"] = kwargs.get("max_workers")
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def map(self, fn, items):
+            return [fn(x) for x in items]
+
+    with patch.object(rs_mod, "ThreadPoolExecutor", _SpyExecutor):
+        run_rs(
+            {"ga": {"population_size": 2, "generations": 1, "workers": 13}},
+            functions=fns, references=refs,
+            output_dir=tmp_path / "out", score_fn=mock,
+            workers=5,  # should override the config value
+        )
+    assert captured["max_workers"] == 5

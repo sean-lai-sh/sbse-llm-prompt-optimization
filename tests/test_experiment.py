@@ -404,6 +404,7 @@ def test_resume_reruns_empty_generations_even_with_best_json(tmp_path: Path) -> 
 
 
 def test_resume_reruns_invalid_generations_schema(tmp_path: Path) -> None:
+    """generations.jsonl with valid JSON but wrong shape (e.g. {}) -> rerun."""
     d = tmp_path / "ga_trial_000_invalid_schema"
     d.mkdir()
     (d / "best.json").write_text(json.dumps(_mk_template().to_dict()), encoding="utf-8")
@@ -421,3 +422,30 @@ def test_resume_reruns_invalid_generations_schema(tmp_path: Path) -> None:
 
     assert len(ga_calls) == 1
     assert results[0].resumed is False
+
+
+def test_resume_reruns_schema_invalid_completed_trial_dir(tmp_path: Path) -> None:
+    """Both best.json AND generations.jsonl have wrong shape -> rerun.
+    Covers the codex P2 finding that TypeError from GenerationLog(**row)
+    used to escape and abort the whole experiment instead of being treated
+    as a corrupt completed-looking trial dir.
+    """
+    import json as _json
+
+    d = tmp_path / "ga_trial_000_corrupt"
+    d.mkdir()
+    (d / "best.json").write_text("{}", encoding="utf-8")  # missing required fields
+    with (d / "generations.jsonl").open("w") as f:
+        f.write(_json.dumps({"k": "v"}) + "\n")  # not a GenerationLog row
+
+    ga_calls: list[dict] = []
+    run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.7, ga_calls)},
+        resume=True,
+    )
+    # Trial 0's best.json was schema-invalid -> we re-ran instead of crashing.
+    assert len(ga_calls) == 1

@@ -117,14 +117,15 @@ def run_rs(
     output_dir: Optional[Path] = None,
     seed: int = 0,
     score_fn: Optional[Callable] = None,
-    workers: int = 8,
+    workers: Optional[int] = None,
 ) -> tuple[PromptTemplate, list[GenerationLog]]:
     """Run Random Search with the same total budget as the GA.
 
     Args:
         config: parsed config dict. When None, loads ``config.yaml`` from the
             repo root. Must contain ``ga.population_size`` and
-            ``ga.generations``; ``evaluation.eval_subset`` is honored if set.
+            ``ga.generations``; ``evaluation.eval_subset`` is honored if set;
+            ``ga.workers`` (if set) is honored for fairness with run_ga.
         generate_summary: callable forwarded to the fitness function;
             defaults to the OpenRouter-backed implementation in ``src.target_model``.
         functions: ordered function paths. Defaults to the full benchmark.
@@ -134,7 +135,9 @@ def run_rs(
         seed: RNG seed for template sampling. Same seed -> identical run.
         score_fn: fitness callable matching ``score_prompt``'s signature.
             Defaults to ``score_prompt``; injected for tests.
-        workers: thread pool size for parallel fitness evaluation.
+        workers: thread pool size. Defaults to ``ga.workers`` from config
+            (so RS gets the same parallelism as GA), falling back to 8 if
+            unset.
 
     Returns:
         ``(best_template, logs)`` where ``logs`` has length ``G``.
@@ -142,6 +145,8 @@ def run_rs(
     cfg = _load_config(config)
 
     ga_cfg = cfg.get("ga") or {}
+    if workers is None:
+        workers = int(ga_cfg.get("workers", 8))
     try:
         population_size = int(ga_cfg["population_size"])
         generations = int(ga_cfg["generations"])
