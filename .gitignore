@@ -15,3 +15,7 @@ venv/
 .DS_Store
 .idea/
 .vscode/
+# Experiment outputs and personal notes (not tracked)
+results/
+findings*.md
+notes*.md
