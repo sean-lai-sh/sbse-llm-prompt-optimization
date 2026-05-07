@@ -102,7 +102,7 @@ def _load_completed_trial(run_dir: Path) -> tuple[PromptTemplate, list[Generatio
         best_template = PromptTemplate.from_dict(
             json.loads((run_dir / "best.json").read_text(encoding="utf-8"))
         )
-    except (TypeError, KeyError) as exc:
+    except (TypeError, KeyError, json.JSONDecodeError) as exc:
         raise ValueError(f"best.json in {run_dir} has invalid schema") from exc
     logs: list[GenerationLog] = []
     with (run_dir / "generations.jsonl").open(encoding="utf-8") as f:
@@ -111,7 +111,7 @@ def _load_completed_trial(run_dir: Path) -> tuple[PromptTemplate, list[Generatio
             if line:
                 try:
                     logs.append(GenerationLog(**json.loads(line)))
-                except (TypeError, KeyError) as exc:
+                except (TypeError, KeyError, json.JSONDecodeError) as exc:
                     raise ValueError(
                         f"generations.jsonl in {run_dir} has invalid schema"
                     ) from exc
