@@ -6,15 +6,15 @@ improver:
   n_variants: 3                         # improved variants generated per generation
 
 target_model:
-  model: nvidia/nemotron-3-super-120b-a12b   # fixed OpenRouter model for fitness evaluation
+  model: nvidia/llama-3.3-nemotron-super-49b-v1   # fixed OpenRouter model for fitness evaluation; was nemotron-3-super-120b-a12b but ~11s/call extrapolated to ~9h experiment, swapped to the 49B variant for ~1-2h
   temperature: 0                        # deterministic outputs
   max_tokens: 512
   retry_attempts: 3
   retry_initial_backoff_seconds: 1.0
 
 ga:
-  population_size: 12      # was 20 — convergence on this small search space doesn't need 20
-  generations: 15          # was 30 — this space converges in ~10-15 anyway
+  population_size: 12      # 
+  generations: 15          #
   elite_count: 2
   crossover_rate: 0.7
   mutation_rate: 0.3
