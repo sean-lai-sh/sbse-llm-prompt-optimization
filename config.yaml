@@ -6,7 +6,7 @@ improver:
   n_variants: 3                         # improved variants generated per generation
 
 target_model:
-  model: nvidia/llama-3.3-nemotron-super-49b-v1   # fixed OpenRouter model for fitness evaluation; was nemotron-3-super-120b-a12b but ~11s/call extrapolated to ~9h experiment, swapped to the 49B variant for ~1-2h
+  model: nvidia/llama-3.3-nemotron-super-49b-v1.5   # fixed OpenRouter model for fitness evaluation; was nemotron-3-super-120b-a12b but ~11s/call extrapolated to ~9h experiment, swapped to the 49B v1.5 variant for ~1-2h
   temperature: 0                        # deterministic outputs
   max_tokens: 512
   retry_attempts: 3
@@ -32,7 +32,7 @@ fitness:
                          # scripts/calibrate_cosine_baseline.py.
 
 evaluation:
-  eval_subset: 10     # 10 functions per fitness call; set to null to use all 500 (final eval only)
+  eval_subset: 5    # 5 functions per fitness call; set to null to use all 500 (final eval only)
 
 experiment:
   trials: 10                              # independent runs per algorithm; >=10 keeps Wilcoxon credible
