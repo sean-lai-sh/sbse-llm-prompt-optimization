@@ -80,6 +80,7 @@ def _score_trial_on_test_bench(
     *,
     generate_summary=None,
     call_progress=None,
+    workers: int = 16,
 ) -> dict:
     """Re-score a trial's best template on the held-out test benchmark.
 
@@ -112,7 +113,9 @@ def _score_trial_on_test_bench(
     elif generate_summary is not None:
         eval_kwargs["generate_summary"] = generate_summary
 
-    eval_result = evaluate_prompt(template, functions, references, **eval_kwargs)
+    eval_result = evaluate_prompt(
+        template, functions, references, workers=workers, **eval_kwargs
+    )
     rouge_l = eval_result["aggregate"]["rouge_l_mean"]
     cosine_raw = eval_result["aggregate"]["cosine_mean"]
     # Apply the same calibration the GA uses.
@@ -149,6 +152,11 @@ def main() -> int:
                              "(default: data/test/references/)")
     parser.add_argument("--no-progress", action="store_true",
                         help="suppress the tqdm progress bar")
+    parser.add_argument("--workers", type=int, default=16,
+                        help="parallel generate_summary calls per template "
+                             "(default: 16). Each template's 50 calls are "
+                             "fanned out via ThreadPoolExecutor before the "
+                             "single cosine batch + ROUGE-L pass.")
     args = parser.parse_args()
 
     grouped = discover_trial_dirs(args.results_root)
@@ -200,6 +208,7 @@ def main() -> int:
             scores = _score_trial_on_test_bench(
                 trial_dir, functions, references, cfg,
                 call_progress=(lambda: tick(1)) if tick is not None else None,
+                workers=args.workers,
             )
             per_trial[algo].append(scores)
             for k in columns[algo]:

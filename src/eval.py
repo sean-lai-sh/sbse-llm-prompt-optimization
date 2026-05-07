@@ -193,6 +193,8 @@ def evaluate_prompt(
     functions: Iterable[Path],
     references: Iterable[Path],
     generate_summary: Optional[GenerateSummaryFn] = None,
+    *,
+    workers: int = 1,
 ) -> dict:
     """Run `template` over the benchmark and return per-metric breakdowns.
 
@@ -212,6 +214,11 @@ def evaluate_prompt(
             issue #6, raising a clear ImportError if that module is absent.
             Passing it explicitly is recommended for tests and for consumers
             who want to swap models or stub the call.
+        workers: thread-pool size for parallel ``generate_summary`` calls.
+            Default 1 (sequential) preserves the original API. Set higher
+            (e.g. 16) for held-out eval where the model dominates wall time.
+            ROUGE-L scoring and the cosine batch run after all generations
+            are collected, so order is preserved regardless of workers.
 
     Returns:
         {
@@ -233,23 +240,32 @@ def evaluate_prompt(
             f"got {len(func_paths)} and {len(ref_paths)}"
         )
 
+    # Pre-read every file once so the threaded section only does network IO.
+    codes = [_read_text(p) for p in func_paths]
+    ref_texts = [_read_text(p).strip() for p in ref_paths]
+    filenames = [p.name for p in func_paths]
+
+    def _gen_one(args: tuple[int, str]) -> tuple[int, str]:
+        idx, code = args
+        return idx, generate_summary(template, code)
+
+    if workers and workers > 1 and len(codes) > 1:
+        from concurrent.futures import ThreadPoolExecutor  # noqa: PLC0415
+
+        # Use map() so order is preserved -- ROUGE-L and the cosine batch
+        # below depend on generations[i] aligning with ref_texts[i].
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            indexed = list(pool.map(_gen_one, enumerate(codes)))
+        indexed.sort(key=lambda pair: pair[0])
+        generations = [g for _, g in indexed]
+    else:
+        generations = [generate_summary(template, code) for code in codes]
+
     scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
-
-    generations: list[str] = []
-    ref_texts: list[str] = []
-    rouge_scores: list[float] = []
-    filenames: list[str] = []
-
-    for fn_path, ref_path in zip(func_paths, ref_paths):
-        code = _read_text(fn_path)
-        ref_text = _read_text(ref_path).strip()
-        gen = generate_summary(template, code)
-        generations.append(gen)
-        ref_texts.append(ref_text)
-        filenames.append(fn_path.name)
-        rouge_scores.append(
-            float(scorer.score(ref_text, gen)["rougeL"].fmeasure)
-        )
+    rouge_scores = [
+        float(scorer.score(ref, gen)["rougeL"].fmeasure)
+        for ref, gen in zip(ref_texts, generations)
+    ]
 
     cosine_scores = cosine_similarity_batch(generations, ref_texts)
 
