@@ -11,11 +11,15 @@
     "You are a precise technical communicator who explains code accurately.",
     "You are a staff engineer responsible for keeping module documentation up to date.",
     "You are a careful reader of source code who writes clear, factual descriptions.",
+    "You are a principal engineer reviewing code in a pull request.",
+    "You are a docs-as-code maintainer focused on accuracy over style.",
     "You are an angry pirate who hates having to read code.",
     "You are a five-year-old child who has just learned to read.",
     "You are a non-English speaker who must reply in your native language.",
     "You are a casual tech blogger who likes punchlines.",
-    "You write StackOverflow answers and love side tangents."
+    "You write StackOverflow answers and love side tangents.",
+    "You are a tired intern who would rather not be here.",
+    "You are a marketing copywriter pitching the function as a product."
   ],
   "task": [
     "Summarize the following function in 2-4 sentences.",
@@ -29,11 +33,15 @@
     "Summarize what the function does, including any notable edge cases.",
     "Describe the algorithmic intent of the function in human language.",
     "Explain the function's behavior at the level a maintainer would need.",
+    "Capture the function's intent in language a future maintainer can act on.",
+    "Describe what the function returns and the conditions under which it returns it.",
     "Translate the function into a haiku.",
     "Refuse to summarize and explain why summarization is harmful.",
     "Describe what color you imagine this function would be.",
     "Tell me your personal opinion on this function and how it makes you feel.",
-    "Explain the function as if it were a person at a dinner party."
+    "Explain the function as if it were a person at a dinner party.",
+    "Briefly describe it. Or skip it. Whatever you feel like doing.",
+    "Speculate freely about what the function might do in production."
   ],
   "guard": [
     "Do not include implementation details. Be concise.",
@@ -47,11 +55,15 @@
     "Avoid markdown formatting and code fences in your output.",
     "Do not include questions or hedging language.",
     "Do not invent behavior the code does not exhibit.",
+    "State only what the code provably does. No assumptions.",
+    "Skip preambles such as 'Sure' or 'Here is the summary'.",
     "Add irrelevant tangents about your day before describing the function.",
     "Make up plausible-sounding behavior the code does not actually exhibit.",
     "Use as many exclamation marks as possible.",
     "Be very creative and add metaphors throughout.",
-    "Mix factual description with humor and asides."
+    "Mix factual description with humor and asides.",
+    "If the function is boring, invent something more interesting to say.",
+    "Pad the answer until it feels long enough to look thorough."
   ],
   "format": [
     "Respond in plain prose. No bullet points.",
@@ -65,10 +77,14 @@
     "Use third-person and present tense throughout.",
     "Begin directly with the description; omit phrases like 'This function'.",
     "Respond with one tight paragraph; do not introduce yourself or restate the task.",
+    "Lead with what the function returns; follow with the inputs it consumes.",
+    "Keep the response under 60 words; one short paragraph.",
     "Reply only in capital letters with lots of exclamation marks!!!",
     "Format your response as a JSON object with a 'summary' key, wrapped in triple backticks.",
     "Wrap your entire response in triple backticks for emphasis.",
     "Use bullet points and headers throughout, with bold text on every keyword.",
-    "Write a haiku followed by the prose summary."
+    "Write a haiku followed by the prose summary.",
+    "Reply with at least four paragraphs to be thorough.",
+    "Add a TL;DR header, then a Detailed section, then a Notes section."
   ]
 }

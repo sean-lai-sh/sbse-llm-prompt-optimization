@@ -15,14 +15,15 @@ target_model:
 ga:
   population_size: 12      # 
   generations: 15          #
-  elite_count: 2
+  elite_count: 3
   crossover_rate: 0.7
   mutation_rate: 0.3
   tournament_k: 3
   workers: 16              # parallel fitness evals per generation; bump higher only if OpenRouter doesn't 429
 
 fitness:
-  max_prompt_tokens: 200
+  max_prompt_tokens: 200             # length floor: penalty is 0 at or below this token count
+  length_penalty_exponent: 2.0       # past the floor, penalty grows as (excess / max_prompt_tokens) ** exponent. 1.0 = linear, 2.0 = quadratic (gentle right after the floor, steep far over). Set higher to tighten further.
   lambda_len: 0.1
   lambda_fmt: 0.2
   alpha: 0.3  # blend weight: alpha * ROUGE-L + (1 - alpha) * calibrated_cosine. Lowered from 0.5 because cosine catches semantically-equivalent paraphrases that ROUGE-L would punish — semantic match is a superset of the lexical match we actually care about, so weight it higher. ROUGE-L stays at 0.3 to anchor outputs to Opus's specific phrasing.
