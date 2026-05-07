@@ -32,3 +32,7 @@ fitness:
 
 evaluation:
   eval_subset: null   # null = use all 500 files; set to an int for fast inner-loop evals
+
+experiment:
+  trials: 10                              # independent runs per algorithm; >=10 keeps Wilcoxon credible
+  base_seed: 0                            # trial i uses seed = base_seed + i (matched across GA/RS)
