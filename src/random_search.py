@@ -57,7 +57,9 @@ def _default_benchmark(
     """Pair every function file with its same-stem reference file.
 
     Fails loud if any function lacks a matching reference (or vice-versa) so
-    a missing data file can't silently shrink the benchmark.
+    a missing data file can't silently shrink the benchmark. Only source files
+    with ``.py``, ``.js``, or ``.ts`` extensions are considered benchmark
+    functions; metadata files (e.g. ``manifest.json``) are ignored.
     """
     supported_ext = {".py", ".js", ".ts"}
     fn_paths = sorted(

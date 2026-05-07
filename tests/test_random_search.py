@@ -328,13 +328,17 @@ def test_default_benchmark_ignores_non_benchmark_files(tmp_path: Path) -> None:
     fn_dir.mkdir()
     ref_dir.mkdir()
     (fn_dir / "a.js").write_text("function a(){}")
+    (fn_dir / "b.py").write_text("def b(): pass")
+    (fn_dir / "c.ts").write_text("function c(): void {}")
     (fn_dir / "manifest.json").write_text("{}")
     (ref_dir / "a.txt").write_text("a")
+    (ref_dir / "b.txt").write_text("b")
+    (ref_dir / "c.txt").write_text("c")
     (ref_dir / ".gitkeep").write_text("")
 
     fns, refs = _default_benchmark(fn_dir, ref_dir)
-    assert [p.name for p in fns] == ["a.js"]
-    assert [p.name for p in refs] == ["a.txt"]
+    assert [p.name for p in fns] == ["a.js", "b.py", "c.ts"]
+    assert [p.name for p in refs] == ["a.txt", "b.txt", "c.txt"]
 
 
 def test_default_benchmark_pairs_by_stem(tmp_path: Path) -> None:
