@@ -1,0 +1,1 @@
+Returns True when its float argument is strictly less than zero, False otherwise. Inputs of zero or any positive number return False, and the function performs no special handling for NaN beyond what the comparison operator provides.

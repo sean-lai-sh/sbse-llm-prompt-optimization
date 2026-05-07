@@ -1,0 +1,1 @@
+Returns true if its numeric argument is strictly greater than zero, and false otherwise. Zero, negative numbers, and NaN all yield false because comparisons with NaN are always false. The implementation is a single expression.

@@ -1,0 +1,1 @@
+Returns the area of a circle of the given radius using math.pi * radius * radius. Validates that radius is non-negative and raises ValueError otherwise. The output is a float.

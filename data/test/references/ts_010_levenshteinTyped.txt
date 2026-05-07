@@ -1,0 +1,1 @@
+TypeScript-typed Levenshtein edit distance between two strings using a rolling 1D dynamic-programming row. Short-circuits the equal-string and empty-string cases up front; uniform unit costs for insertion, deletion, and substitution. Time O(|a|*|b|), space O(|b|).

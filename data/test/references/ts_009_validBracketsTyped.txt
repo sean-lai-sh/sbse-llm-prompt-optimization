@@ -1,0 +1,1 @@
+Checks whether the bracket characters in s are properly balanced across (), [], and {}. Pushes opening characters onto a stack and verifies each closer matches the top of the stack; non-bracket characters are ignored. Returns false on any mismatch and requires the stack to be empty at end of input.

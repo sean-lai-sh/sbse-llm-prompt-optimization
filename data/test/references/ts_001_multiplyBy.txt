@@ -1,0 +1,1 @@
+Returns the product of x and factor as a number, inheriting IEEE-754 multiplication semantics. The implementation is a single expression with no validation or special-casing. NaN and infinity inputs propagate or scale according to standard floating-point rules.

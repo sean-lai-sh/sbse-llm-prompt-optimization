@@ -1,0 +1,1 @@
+Checks whether all bracket characters in a string are properly nested and matched across (), [], and {}. Walks the string with a stack, returning False on the first mismatched closer and requiring the stack to be empty at the end. Non-bracket characters are ignored.

@@ -1,0 +1,1 @@
+Returns any index of a peak in nums, where a peak is an element strictly greater than both of its neighbors and out-of-bounds neighbors are treated as negative infinity. Uses binary search comparing nums[mid] to nums[mid+1], guaranteeing termination on a peak in O(log n) time. Raises ValueError on empty input.

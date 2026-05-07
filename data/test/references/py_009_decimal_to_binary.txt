@@ -1,0 +1,1 @@
+Converts a signed integer to its binary string representation, returning '0' for zero and prefixing a '-' for negative inputs before encoding the absolute value. The bit string is built by repeatedly masking the lowest bit and right-shifting. Handles arbitrary-precision Python integers without overflow.

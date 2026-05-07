@@ -1,0 +1,1 @@
+Computes the edit distance between source and target with configurable per-operation costs (insertCost, deleteCost, replaceCost, all defaulting to 1). Builds a full 2D DP table whose first row and column are initialized to j*insertCost and i*deleteCost respectively, then fills the rest by the standard transition. Runs in O(m*n) time and O(m*n) space.

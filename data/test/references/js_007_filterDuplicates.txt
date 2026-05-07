@@ -1,0 +1,1 @@
+Returns a new array containing only the elements that appear exactly once in the input, preserving original order. Uses a Map to count occurrences via strict-equality identity, so distinct object references with the same shape are treated as different keys. Time O(n), space O(n).

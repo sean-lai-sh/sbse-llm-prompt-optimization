@@ -1,0 +1,1 @@
+Groups the input words into buckets that are anagrams of each other, keyed by each word's sorted-character signature. Returns an array of these buckets, with each bucket preserving the original input order. Runs in O(n * k log k) time for n words of average length k.

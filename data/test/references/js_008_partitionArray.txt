@@ -1,0 +1,1 @@
+Splits an array into two new arrays based on a predicate: the first holds elements for which predicate returned a truthy value and the second holds the rest, returned together as a 2-tuple. Order within each bucket follows the original input order, and the input array is not mutated. Runs in O(n) time.

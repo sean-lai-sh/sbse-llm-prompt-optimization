@@ -1,0 +1,1 @@
+Computes single-source shortest distances from source over a weighted directed graph represented as Map<number, Edge[]>. Uses an O(V^2) variant that scans the pending set for the minimum-distance node each iteration rather than a binary heap, and bails out early once all remaining nodes are unreachable. Returns a Map<number, number> with Infinity for unreachable nodes.

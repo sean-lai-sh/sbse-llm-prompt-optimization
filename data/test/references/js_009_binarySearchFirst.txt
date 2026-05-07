@@ -1,0 +1,1 @@
+Returns the leftmost index in a sorted array whose element equals target, or -1 when no such element exists. Performs binary search but, on a match, continues searching the left half (hi = mid - 1) so the smallest matching index is returned. Uses the unsigned shift >>> 1 for the midpoint to avoid signed-overflow concerns on very large arrays.

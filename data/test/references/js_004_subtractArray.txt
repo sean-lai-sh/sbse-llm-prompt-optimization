@@ -1,0 +1,1 @@
+Treats the first array element as the running total and subtracts each subsequent element via Array.prototype.reduce, returning the cumulative difference arr[0] - arr[1] - ... - arr[n-1]. Returns 0 for an empty array. The input array is not mutated.

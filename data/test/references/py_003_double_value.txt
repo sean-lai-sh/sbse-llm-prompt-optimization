@@ -1,0 +1,1 @@
+Multiplies its float input by two and returns the result as a float. The implementation is a single expression with no validation, so NaN and infinity inputs propagate or scale according to standard IEEE-754 semantics.

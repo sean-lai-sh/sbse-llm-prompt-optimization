@@ -1,0 +1,1 @@
+Returns the literal-typed string 'even' if n % 2 === 0 and 'odd' otherwise, with the TypeScript return type narrowed to 'even' | 'odd'. JavaScript's % semantics apply, so negative even numbers also yield 'even'. The implementation is a single ternary expression.

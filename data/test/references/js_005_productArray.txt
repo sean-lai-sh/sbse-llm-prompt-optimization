@@ -1,0 +1,1 @@
+Returns the product of all numbers in the array using reduce with an identity initial value of 1. An empty array therefore yields 1, and any zero in the input forces the result to zero. Runs in O(n) time and does not mutate the input.

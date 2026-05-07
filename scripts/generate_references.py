@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Generate ground-truth reference summaries for every benchmark function.
 
-Calls Claude Opus (model `claude-opus-4-7`) once per file in
-`data/functions/`, writing the resulting 2-4 sentence summary to
-`data/references/<basename>.txt`. Resumes by skipping files whose reference
+Calls Claude Opus (model `claude-opus-4-7`) once per file in the input
+directory, writing the resulting 2-4 sentence summary to the output
+directory as ``<basename>.txt``. Resumes by skipping files whose reference
 already exists. Logs token usage and estimated cost on completion.
 
 Usage:
-    python scripts/generate_references.py            # generate everything missing
-    python scripts/generate_references.py --dry-run  # list calls, no API requests
-    python scripts/generate_references.py --limit 5  # cap to N files (debugging)
+    python scripts/generate_references.py                 # data/functions -> data/references
+    python scripts/generate_references.py --dry-run       # list calls, no API requests
+    python scripts/generate_references.py --limit 5       # cap to N files (debugging)
+    python scripts/generate_references.py \\               # held-out test set
+        --functions-dir data/test/functions \\
+        --references-dir data/test/references
 """
 
 from __future__ import annotations
@@ -26,8 +29,8 @@ from dotenv import load_dotenv
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-FUNCTIONS_DIR = REPO_ROOT / "data" / "functions"
-REFERENCES_DIR = REPO_ROOT / "data" / "references"
+DEFAULT_FUNCTIONS_DIR = REPO_ROOT / "data" / "functions"
+DEFAULT_REFERENCES_DIR = REPO_ROOT / "data" / "references"
 
 MODEL = "claude-opus-4-7"
 MAX_TOKENS = 1024
@@ -52,16 +55,16 @@ LANGUAGE_BY_EXTENSION = {
 }
 
 
-def discover_function_files() -> list[Path]:
+def discover_function_files(functions_dir: Path) -> list[Path]:
     return sorted(
         path
-        for path in FUNCTIONS_DIR.iterdir()
+        for path in functions_dir.iterdir()
         if path.is_file() and path.suffix in LANGUAGE_BY_EXTENSION
     )
 
 
-def reference_path_for(function_path: Path) -> Path:
-    return REFERENCES_DIR / f"{function_path.stem}.txt"
+def reference_path_for(function_path: Path, references_dir: Path) -> Path:
+    return references_dir / f"{function_path.stem}.txt"
 
 
 def build_user_message(function_path: Path) -> str:
@@ -152,21 +155,38 @@ def main() -> int:
         default=None,
         help="Process at most N files (after skip filtering). Useful for debugging.",
     )
+    parser.add_argument(
+        "--functions-dir",
+        type=Path,
+        default=DEFAULT_FUNCTIONS_DIR,
+        help="Directory of source function files to summarize "
+        "(default: data/functions).",
+    )
+    parser.add_argument(
+        "--references-dir",
+        type=Path,
+        default=DEFAULT_REFERENCES_DIR,
+        help="Directory to write reference summaries into "
+        "(default: data/references).",
+    )
     args = parser.parse_args()
 
     load_dotenv()
 
-    if not FUNCTIONS_DIR.is_dir():
-        print(f"ERROR: {FUNCTIONS_DIR} does not exist.", file=sys.stderr)
+    functions_dir: Path = args.functions_dir
+    references_dir: Path = args.references_dir
+
+    if not functions_dir.is_dir():
+        print(f"ERROR: {functions_dir} does not exist.", file=sys.stderr)
         return 1
 
-    REFERENCES_DIR.mkdir(parents=True, exist_ok=True)
+    references_dir.mkdir(parents=True, exist_ok=True)
 
-    function_files = discover_function_files()
+    function_files = discover_function_files(functions_dir)
     pending: list[Path] = []
     skipped = 0
     for fp in function_files:
-        if reference_path_for(fp).exists():
+        if reference_path_for(fp, references_dir).exists():
             skipped += 1
             continue
         pending.append(fp)
@@ -182,7 +202,12 @@ def main() -> int:
     if args.dry_run:
         print(f"\nDry run — would call {MODEL} on:")
         for fp in pending:
-            print(f"  {fp.name} -> {reference_path_for(fp).relative_to(REPO_ROOT)}")
+            ref_path = reference_path_for(fp, references_dir)
+            try:
+                ref_display = ref_path.relative_to(REPO_ROOT)
+            except ValueError:
+                ref_display = ref_path
+            print(f"  {fp.name} -> {ref_display}")
         return 0
 
     if not pending:
@@ -220,7 +245,7 @@ def main() -> int:
             failures.append((fp, RuntimeError("empty summary returned")))
             continue
 
-        reference_path_for(fp).write_text(summary + "\n", encoding="utf-8")
+        reference_path_for(fp, references_dir).write_text(summary + "\n", encoding="utf-8")
 
         usage = message.usage
         cache_write = getattr(usage, "cache_creation_input_tokens", 0) or 0

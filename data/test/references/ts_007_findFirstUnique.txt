@@ -1,0 +1,1 @@
+Returns the first element of the array whose count is exactly 1, or undefined when every element repeats. Counts occurrences via a Map keyed by strict-equality identity, then walks the array a second time to preserve original order. Generic over the element type T; runs in O(n) time and O(n) space.

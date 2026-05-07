@@ -1,0 +1,1 @@
+Returns the number of distinct ways to make amount using each coin denomination zero or more times, via the classic 1D coin-change DP. Iterates coins in the outer loop and amount in the inner loop so each coin contributes only after its prefix is settled, counting combinations rather than permutations. Returns 0 for negative amounts and 1 when amount is 0.

@@ -1,0 +1,1 @@
+Performs the LeetCode word-ladder search: finds the shortest transformation length from begin to end where each step changes one lowercase letter and the resulting word is in wordList. Returns 0 when end is not in the dictionary or unreachable. Uses BFS over a frontier set, expanding by trying every single-letter substitution at every position.

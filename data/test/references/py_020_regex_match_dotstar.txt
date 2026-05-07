@@ -1,0 +1,1 @@
+Reports whether pattern matches the entirety of text under a small regex dialect supporting literals, '.' (any single character), and '*' (zero-or-more of the preceding token). Uses 2D dynamic programming over text and pattern lengths in O(m*n) time, with the empty-text row primed via the x* zero-occurrence rule. The match is anchored, so partial matches return False.

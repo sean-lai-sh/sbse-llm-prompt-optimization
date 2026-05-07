@@ -1,0 +1,1 @@
+Given a list of n distinct integers drawn from [0, n] with exactly one value missing, returns the missing value. Uses the closed-form Gauss sum n*(n+1)/2 minus the actual sum of the inputs, achieving O(n) time and O(1) space. Assumes the input precondition holds and does not validate it.
