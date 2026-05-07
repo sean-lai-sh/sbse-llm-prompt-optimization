@@ -39,8 +39,9 @@ def _make_progress(start: float):
     def _cb(result: TrialResult) -> None:
         last["count"] += 1
         elapsed = time.perf_counter() - start
+        marker = "[resumed]" if result.resumed else "         "
         print(
-            f"[{last['count']:3d}] {result.algorithm:>2} trial {result.trial_index:02d} "
+            f"[{last['count']:3d}] {marker} {result.algorithm:>2} trial {result.trial_index:02d} "
             f"seed={result.seed:<4d} best_blended={result.best_blended:.4f}  "
             f"elapsed={elapsed:6.1f}s -> {result.output_dir.name}",
             flush=True,
@@ -64,6 +65,11 @@ def main() -> int:
                         help="trial i uses seed = base_seed + i (default 0)")
     parser.add_argument("--skip-analysis", action="store_true",
                         help="don't auto-run scripts/analyze_results.py at the end")
+    parser.add_argument("--no-resume", action="store_true",
+                        help="re-run every trial even if --output-root already "
+                             "contains completed trial directories. Default is "
+                             "to load completed trials from disk and only run "
+                             "the missing ones.")
     args = parser.parse_args()
 
     if args.algorithm == "both":
@@ -78,9 +84,10 @@ def main() -> int:
         ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         output_root = REPO_ROOT / "results" / f"experiment_{ts}"
 
+    resume = not args.no_resume
     print(
         f"Running {args.trials} trial(s) of {algos} -> {output_root}\n"
-        f"Config: {args.config}  base_seed={args.base_seed}",
+        f"Config: {args.config}  base_seed={args.base_seed}  resume={resume}",
         flush=True,
     )
 
@@ -92,6 +99,7 @@ def main() -> int:
         output_root=output_root,
         base_seed=args.base_seed,
         progress=_make_progress(start),
+        resume=resume,
     )
     total = time.perf_counter() - start
 

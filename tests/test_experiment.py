@@ -186,3 +186,116 @@ def test_run_experiment_rejects_unknown_algorithm(tmp_path: Path) -> None:
         run_experiment(
             {}, trials=1, output_root=tmp_path, algorithms=["does-not-exist"],
         )
+
+
+# ---------------------------------------------------------------------------
+# Resume behavior
+# ---------------------------------------------------------------------------
+
+
+def _seed_completed_trial(
+    output_root: Path,
+    algo: str,
+    trial_index: int,
+    *,
+    blended: float = 0.77,
+    n_logs: int = 3,
+) -> Path:
+    """Pre-create a fully-completed trial directory on disk."""
+    import json
+    from dataclasses import asdict
+    d = output_root / f"{algo}_trial_{trial_index:03d}_2026-pre"
+    d.mkdir(parents=True)
+    template = _mk_template(role=f"resumed-{algo}-{trial_index}")
+    (d / "best.json").write_text(json.dumps(template.to_dict()), encoding="utf-8")
+    logs = _mk_logs(blended, n=n_logs)
+    with (d / "generations.jsonl").open("w") as f:
+        for log in logs:
+            f.write(json.dumps(asdict(log)) + "\n")
+    return d
+
+
+def test_resume_skips_completed_trials(tmp_path: Path) -> None:
+    """Pre-seeded GA trial 0 should be loaded, not re-run."""
+    _seed_completed_trial(tmp_path, "ga", 0, blended=0.91)
+
+    ga_calls: list[dict] = []
+    rs_calls: list[dict] = []
+
+    results = run_experiment(
+        {},
+        trials=2,
+        output_root=tmp_path,
+        algorithm_overrides={
+            "ga": _make_mock_algo(0.5, ga_calls),
+            "rs": _make_mock_algo(0.4, rs_calls),
+        },
+        resume=True,
+    )
+
+    # Only GA trial 1 (and both RS trials) should have actually run.
+    assert len(ga_calls) == 1
+    assert ga_calls[0]["seed"] == 1
+    assert len(rs_calls) == 2
+
+    ga_results = sorted([r for r in results if r.algorithm == "ga"],
+                        key=lambda r: r.trial_index)
+    assert ga_results[0].resumed is True
+    assert ga_results[0].best_blended == pytest.approx(0.91)
+    assert ga_results[0].best_template.role == "resumed-ga-0"
+    assert ga_results[1].resumed is False
+
+
+def test_resume_false_forces_rerun_of_all_trials(tmp_path: Path) -> None:
+    _seed_completed_trial(tmp_path, "ga", 0, blended=0.91)
+
+    ga_calls: list[dict] = []
+    run_experiment(
+        {},
+        trials=2,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.5, ga_calls)},
+        resume=False,
+    )
+    # Even though trial 0 exists on disk, --no-resume runs it again.
+    assert len(ga_calls) == 2
+
+
+def test_resume_with_nothing_to_resume_runs_all(tmp_path: Path) -> None:
+    ga_calls: list[dict] = []
+    run_experiment(
+        {},
+        trials=3,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.7, ga_calls)},
+        resume=True,
+    )
+    # Empty output_root -> every trial runs.
+    assert len(ga_calls) == 3
+    assert [c["seed"] for c in ga_calls] == [0, 1, 2]
+
+
+def test_resume_ignores_partial_trial_dir(tmp_path: Path) -> None:
+    """A trial dir with generations.jsonl but no best.json is NOT complete."""
+    import json
+    from dataclasses import asdict
+    d = tmp_path / "ga_trial_000_partial"
+    d.mkdir()
+    log = _mk_logs(0.5, n=1)[0]
+    with (d / "generations.jsonl").open("w") as f:
+        f.write(json.dumps(asdict(log)) + "\n")
+    # No best.json -> incomplete.
+
+    ga_calls: list[dict] = []
+    run_experiment(
+        {},
+        trials=1,
+        output_root=tmp_path,
+        algorithms=["ga"],
+        algorithm_overrides={"ga": _make_mock_algo(0.8, ga_calls)},
+        resume=True,
+    )
+    # Trial 0 was incomplete -> ran fresh.
+    assert len(ga_calls) == 1
