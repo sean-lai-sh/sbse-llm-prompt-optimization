@@ -1,4 +1,4 @@
-"""Tests for the NVIDIA NIM target model wrapper.
+"""Tests for the OpenRouter target model wrapper.
 
 All OpenAI calls are mocked -- no real network traffic. The fitness module
 (issue #7) will exercise this in integration; here we cover unit-level
@@ -163,10 +163,10 @@ def test_latency_logged_at_debug(
 
 
 def test_missing_api_key_raises(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     # Stop python-dotenv from re-populating from a real .env on disk.
     monkeypatch.setattr(target_model, "load_dotenv", lambda *a, **kw: None)
-    with pytest.raises(ValueError, match="NVIDIA_API_KEY"):
+    with pytest.raises(ValueError, match="OPENROUTER_API_KEY"):
         target_model.generate_summary("p", "c")
 
 

@@ -16,11 +16,8 @@ from src.prompt import PromptTemplate
 
 @dataclass(frozen=True)
 class GenerationLog:
-    """One row per generation (GA) or P-evaluation checkpoint (RS).
+    """One row per generation (GA) or P-evaluation checkpoint (RS)."""
 
-    Both algorithms emit the same schema so results/<run>/generations.jsonl
-    can be loaded uniformly by the analysis stage (issue #11).
-    """
     generation: int
     best_blended: float
     mean_blended: float
