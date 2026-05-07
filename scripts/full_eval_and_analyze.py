@@ -144,12 +144,23 @@ def main() -> int:
                         help="target algorithm prefix (default: ga)")
     parser.add_argument("--baseline", default="rs",
                         help="baseline algorithm prefix (default: rs)")
-    parser.add_argument("--functions-dir", type=Path, default=DEFAULT_FUNCTIONS_DIR,
-                        help="directory of test-set function source files "
-                             "(default: data/test/functions/)")
-    parser.add_argument("--references-dir", type=Path, default=DEFAULT_REFERENCES_DIR,
-                        help="directory of test-set reference summaries "
-                             "(default: data/test/references/)")
+    parser.add_argument("--functions-dir", type=Path, default=None,
+                        help="directory of function source files. "
+                             "Default: data/test/functions/ (held-out test set). "
+                             "Overrides --use-training-set if both are given.")
+    parser.add_argument("--references-dir", type=Path, default=None,
+                        help="directory of reference summaries. "
+                             "Default: data/test/references/ (held-out test set). "
+                             "Overrides --use-training-set if both are given.")
+    parser.add_argument("--use-training-set", action="store_true",
+                        help="DEPRECATED / TRAIN-SET-LEAKY: re-score on "
+                             "data/functions/ + data/references/ -- the same "
+                             "set the GA's eval_subset sampled from during "
+                             "search. Use only for ablation; the headline "
+                             "GA-vs-RS claim should come from the default "
+                             "held-out test set under data/test/. Prints a "
+                             "loud warning and writes its summary with "
+                             "evaluation_kind = 'training_set_resample'.")
     parser.add_argument("--no-progress", action="store_true",
                         help="suppress the tqdm progress bar")
     parser.add_argument("--workers", type=int, default=16,
@@ -167,6 +178,33 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
+
+    # Resolve functions_dir / references_dir with this precedence:
+    #   1. explicit --functions-dir / --references-dir flags
+    #   2. --use-training-set => data/functions + data/references (with warning)
+    #   3. default: held-out test set under data/test/
+    if args.use_training_set:
+        if args.functions_dir is None:
+            args.functions_dir = REPO_ROOT / "data" / "functions"
+        if args.references_dir is None:
+            args.references_dir = REPO_ROOT / "data" / "references"
+        evaluation_kind = "training_set_resample"
+        print(
+            "\n*** WARNING: --use-training-set is TRAIN-SET-LEAKY. ***\n"
+            "    Each trial's GA search drew its eval_subset from\n"
+            "    data/functions/, so re-scoring on the same directory\n"
+            "    is a training-set re-evaluation (less subsampling noise,\n"
+            "    same overfitting risk). For the headline generalization\n"
+            "    claim, run without --use-training-set so it uses the\n"
+            "    held-out test set under data/test/.\n",
+            flush=True,
+        )
+    else:
+        if args.functions_dir is None:
+            args.functions_dir = DEFAULT_FUNCTIONS_DIR
+        if args.references_dir is None:
+            args.references_dir = DEFAULT_REFERENCES_DIR
+        evaluation_kind = "held_out_test_set"
 
     cfg = FitnessConfig.from_yaml()
     functions, references = _benchmark_pairs(args.functions_dir, args.references_dir)
@@ -249,7 +287,7 @@ def main() -> int:
         }
 
     summary = {
-        "evaluation_kind": "held_out_test_set",
+        "evaluation_kind": evaluation_kind,
         "target_algorithm": args.target,
         "baseline_algorithm": args.baseline,
         "functions_dir": str(args.functions_dir),
