@@ -19,7 +19,7 @@ import openai
 from dotenv import load_dotenv
 
 NIM_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_MODEL = "meta/llama-3.1-70b-instruct"
+DEFAULT_MODEL = "minimaxai/minimax-m2.7"
 
 _CACHE_DIR = Path(__file__).resolve().parent.parent / ".nim_cache"
 

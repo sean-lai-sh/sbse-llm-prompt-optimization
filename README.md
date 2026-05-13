@@ -51,6 +51,41 @@ The GA optimizes the blended score directly. Per-metric breakdowns (ROUGE-L only
 
 The fixed target model is `nvidia/llama-3.3-nemotron-super-49b-v1.5` served via OpenRouter (`src/target_model.py`, requires `OPENROUTER_API_KEY` in `.env`). It is held FIXED for the duration of any experiment — only the prompt template evolves. The optional directed-mutation improver (`src/improver.py`, gated by `--use-improver`) independently uses NVIDIA NIM and is not part of the core GA-vs-RS comparison.
 
+## Setup
+
+**Requirements:** Python 3.9+
+
+```bash
+# 1. Clone the repo
+git clone <repo-url>
+cd sbse-llm-prompt-optimization
+
+# 2. Create and activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Create a .env file in the repo root with your API keys
+cp .env.example .env             # if the example file exists, otherwise create manually
+```
+
+Minimum `.env` for a GA/RS experiment (only OpenRouter is required):
+
+```
+OPENROUTER_API_KEY=sk-or-...
+```
+
+Additional keys needed only for optional scripts:
+
+| Key | Used by |
+|---|---|
+| `ANTHROPIC_API_KEY` | `scripts/generate_references.py` (re-generate Opus reference summaries) |
+| `NVIDIA_API_KEY` | `src/improver.py` (directed-mutation improver, off by default) |
+
+The embedding model (`BAAI/bge-small-en-v1.5`) is downloaded automatically by `sentence-transformers` on first run (~130 MB, cached in `~/.cache/huggingface/`).
+
 ## Running an experiment
 
 ```bash

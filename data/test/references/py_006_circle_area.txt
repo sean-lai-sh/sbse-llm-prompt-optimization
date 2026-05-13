@@ -1,1 +1,1 @@
-Returns the area of a circle of the given radius using math.pi * radius * radius. Validates that radius is non-negative and raises ValueError otherwise. The output is a float.
+The `circle_area` function computes the area of a circle given its `radius` (a float), returning the result as a float using the formula π·r². It validates that the radius is non-negative, raising a `ValueError` otherwise, and accepts a radius of zero (yielding an area of zero). It relies on `math.pi` for the constant, so precision is limited to standard double-precision floating point.

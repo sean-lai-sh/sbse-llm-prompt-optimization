@@ -1,1 +1,1 @@
-Computes the area of a triangle from its base and height using the formula 0.5 * base * height. Both inputs and the output are floats. No bounds checking is performed, so negative inputs produce a negative area without error.
+The function computes the area of a triangle from its base and height using the standard formula (½ × base × height), returning the result as a float. It accepts two float arguments and performs no validation, so negative or zero inputs will be accepted and produce correspondingly signed or zero results.

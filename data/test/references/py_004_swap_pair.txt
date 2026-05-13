@@ -1,1 +1,1 @@
-Returns a 2-tuple containing the two integer arguments in swapped order. The function relies on Python's tuple packing and performs no mutation of any external state. Inputs and outputs are simple integers.
+The `swap_pair` function takes two integers `a` and `b` and returns them as a tuple in reversed order, `(b, a)`. It performs a simple positional swap via tuple packing, with no mutation of inputs and no special edge cases since Python integers are immutable and the type hints are not enforced at runtime.
